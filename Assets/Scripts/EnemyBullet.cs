@@ -3,6 +3,7 @@
 public class EnemyBullet : MonoBehaviour
 {
     [SerializeField] private float speed = 0.3f;
+    private int strengthDamage = 25;
     private Transform target;
     private Vector3 targetPosition;
     private Rigidbody rb;
@@ -27,16 +28,16 @@ public class EnemyBullet : MonoBehaviour
     {
         if (other.CompareTag(PlayerTag))
         {
+            player = other.GetComponent<Player>();
+            if (player)
+            {
+                player.StrengthLess(strengthDamage);
+            }
             Destroy(gameObject);
-
-            if (player.GetStrength() >= 25)
-            {
-                player.SetStrength(player.GetStrength() - 25);
-            }
-            else
-            {
-                player.SetStrength(0);
-            }
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }

@@ -18,19 +18,14 @@ public class Player : MonoBehaviour
 
 
     }
-   
+
+    public void StrengthLess(int fade)
+    {
+        strength -= fade;
+    }
+
     public int GetHealth()
     {
         return health;
-    }
-
-    public void SetStrength(int strength)
-    {
-        this.strength = strength;
-    }
-
-    public int GetStrength()
-    {
-        return strength;
     }
 }
