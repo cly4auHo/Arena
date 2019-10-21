@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyCreator : MonoBehaviour
 {
     private float timeOfSpawn = 5f;
+    private float timer = 0;
     private float minTime = 2f;
     private float deltaTime = 0.5f;
 
@@ -16,22 +15,26 @@ public class EnemyCreator : MonoBehaviour
     void Start()
     {
         timeOfSpawn = 5f;
+        timer = 0;
     }
 
+    //void Update()
+    //{
+    //    if (Time.timeSinceLevelLoad - timer > timeOfSpawn)
+    //    {
+    //        for (int i = 0; i < 4; i++)
+    //        {
+    //            currentRedEnemy = Instantiate(RedEnemyPrefab, Vector3.zero, Quaternion.identity);
+    //        }
+    //        currentBlueEnemy = Instantiate(BlueEnemyPrefab, Vector3.zero, Quaternion.identity);
 
-    void Update()
+    //        ChangeTime();
+    //    }
+    //}
+
+    private void ChangeTime()
     {
-        StartCoroutine(Create());
-
-
-    }
-
-    private IEnumerator Create()
-    {
-        yield return new WaitForSeconds(timeOfSpawn);
-        currentRedEnemy = Instantiate(RedEnemyPrefab, Vector3.zero, Quaternion.identity);
-        currentBlueEnemy = Instantiate(BlueEnemyPrefab, Vector3.zero, Quaternion.identity);
-
+        timer = Time.timeSinceLevelLoad;
         timeOfSpawn = Mathf.Max(timeOfSpawn - deltaTime, minTime);
     }
 }

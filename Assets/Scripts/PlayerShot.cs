@@ -10,11 +10,17 @@ public class PlayerShot : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     private GameObject currentBullet;
 
-    private BlueEnemy blueEnemy;
-    private RedEnemy redEnemy;
+    private Player player;
+    private GameManager gm;
+    private const string RedEnemyTag = "RedEnemy";
+    private const string BlueEnemyTag = "BlueEnemy";
+    private int fullStrengt = 100;
 
     void Start()
     {
+        player = FindObjectOfType<Player>();
+        gm = FindObjectOfType<GameManager>();
+
         camera = GetComponent<Camera>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -22,21 +28,30 @@ public class PlayerShot : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0)) // Shot
         {
             currentBullet = Instantiate(bulletPrefab);
             currentBullet.transform.position = transform.TransformPoint(Vector3.forward);
             currentBullet.transform.rotation = transform.rotation;
         }
-        else if (Input.GetMouseButtonDown(1))
+        else if (Input.GetMouseButtonDown(1)) // Ult
         {
-            Ulty();
-        }
-    }
+            if (player.GetStrengt() >= fullStrengt)
+            {
+                player.SetStrengt(0);
 
-    void Ulty()
-    {
-        //blueEnemy = FindObjectsOfTypeAll(typeof(<BlueEnemy>));
+                foreach (GameObject RedEnemies in GameObject.FindGameObjectsWithTag(RedEnemyTag))
+                {
+                    Destroy(RedEnemies);
+                    gm.ScoreUp();
+                }
+                foreach (GameObject BlueEnemies in GameObject.FindGameObjectsWithTag(BlueEnemyTag))
+                {
+                    Destroy(BlueEnemies);
+                    gm.ScoreUp();
+                }
+            }
+        }
     }
 
     void OnGUI()

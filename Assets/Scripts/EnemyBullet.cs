@@ -2,7 +2,7 @@
 
 public class EnemyBullet : MonoBehaviour
 {
-    [SerializeField] private float speed = 0.3f;
+    [SerializeField] private float speed = 3f;
     private int strengthDamage = 25;
     private Transform target;
     private Vector3 targetPosition;

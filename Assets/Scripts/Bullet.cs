@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     private RedEnemy redEnemy;
     private Player player;
     private GameManager gm;
-    private int chanse;
+    private int chanseOfRicochet;
     private int redStrengthUp = 15;
     private int blueStrengthUp = 50;
     private const string RedEnemyTag = "RedEnemy";
@@ -17,7 +17,7 @@ public class Bullet : MonoBehaviour
 
     void Start()
     {
-        chanse = Random.Range(0, 100);
+        chanseOfRicochet = Random.Range(0, 100);
         gm = FindObjectOfType<GameManager>();
         player = FindObjectOfType<Player>();
     }
@@ -35,7 +35,7 @@ public class Bullet : MonoBehaviour
 
             if (redEnemy && redEnemy.GetHealth() > damage)
             {
-                redEnemy.Damage(damage);
+                redEnemy.SetHealth(redEnemy.GetHealth() - damage);
             }
             else
             {
@@ -52,7 +52,7 @@ public class Bullet : MonoBehaviour
 
             if (blueEnemy && blueEnemy.GetHealth() > damage)
             {
-                blueEnemy.Damage(damage);
+                blueEnemy.SetHealth(blueEnemy.GetHealth() - damage);
             }
             else
             {
