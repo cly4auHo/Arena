@@ -1,13 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BlueEnemy : MonoBehaviour
-{
+{ 
     private int health = 100;
     [SerializeField] private float speed = 0.1f;
-    [SerializeField] private float obstacleRange = 0.3f;
-    private float angle;
+    private const string TargetTag = "Player";
 
     [SerializeField] private GameObject enemyBulletPrefab;
     private GameObject currentBullet;
@@ -15,25 +13,21 @@ public class BlueEnemy : MonoBehaviour
     private Ray ray;
     private float radiusOfRay = 1f;
     private GameObject hitObject;
-
+    private float angle;
+    [SerializeField] private float obstacleRange = 0.3f;
+    private Rigidbody rb;
     private Transform target;
     private Vector3 targetPosition;
-    private Rigidbody rb;
-    private const string TargetTag = "Player";
-
-    private GameManager gm;
 
     void Start()
-    {
-        target = GameObject.FindGameObjectWithTag(TargetTag).transform;
-        rb = GetComponent<Rigidbody>();
+    {      
         health = 100;
+        rb = GetComponent<Rigidbody>();
+        //target = GameObject.FindGameObjectWithTag(TargetTag).transform;
     }
 
     void Update()
     {
-
-
 
         //ray = new Ray(transform.position, transform.forward);
         //RaycastHit hit;
@@ -58,12 +52,6 @@ public class BlueEnemy : MonoBehaviour
         //        transform.LookAt(targetPosition);
         //    }
         //}
-
-        if (health <= 0)
-        {
-            Destroy(gameObject);
-            //gm.SetScore(gm.GetScore() + 1);
-        }
     }
 
     private IEnumerator Shoot()
@@ -75,5 +63,10 @@ public class BlueEnemy : MonoBehaviour
     public void Damage(int damage)
     {
         health -= damage;
+    }
+
+    public int GetHealth()
+    {
+        return health;
     }
 }

@@ -1,25 +1,34 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     private int score;
+    [SerializeField] private Text scoreText;
     private Player player;
+
 
     void Start()
     {
         score = 0;
+        player = FindObjectOfType<Player>();
     }
 
-
-    public void SetScore(int score)
+    void Update()
     {
-        this.score = score;
+        if (player && player.GetHealth() > 0)
+        {
+            scoreText.text = "Score : " + score.ToString();
+        }
+        else
+        {
+
+        }
     }
 
-    public int GetScore()
+    public void ScoreUp()
     {
-        return score;
+        score++;
     }
 }

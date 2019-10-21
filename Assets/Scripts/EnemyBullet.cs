@@ -10,6 +10,7 @@ public class EnemyBullet : MonoBehaviour
 
     private const string PlayerTag = "Player";
     private Player player;
+    private bool isTeleport = false;
 
     void Start()
     {
@@ -19,9 +20,28 @@ public class EnemyBullet : MonoBehaviour
 
     void Update()
     {
-        targetPosition = target.position;
-        rb.velocity = (targetPosition - transform.position).normalized * speed;
-        transform.LookAt(targetPosition);       
+        if (!isTeleport)
+        {
+            targetPosition = target.position;
+            rb.velocity = (targetPosition - transform.position).normalized * speed;
+            transform.LookAt(targetPosition);
+        }
+        else
+        {
+            transform.LookAt(targetPosition);
+            transform.Translate(0, 0, speed * Time.deltaTime);
+
+            if (transform.position == targetPosition)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    public void AfterTeleport(Vector3 newPosition)
+    {
+        isTeleport = true;
+        targetPosition = newPosition;
     }
 
     void OnTriggerEnter(Collider other)
@@ -29,10 +49,12 @@ public class EnemyBullet : MonoBehaviour
         if (other.CompareTag(PlayerTag))
         {
             player = other.GetComponent<Player>();
+
             if (player)
             {
-                player.StrengthLess(strengthDamage);
+                player.SetStrengt(Mathf.Max(player.GetStrengt() - strengthDamage, 0));
             }
+
             Destroy(gameObject);
         }
         else
