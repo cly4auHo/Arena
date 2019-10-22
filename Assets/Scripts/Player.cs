@@ -16,15 +16,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (health > 0)
-        {
-            healtText.text = "Health " + health.ToString() + "/100";
-            strengthText.text = "Strength " + strength.ToString() + "/100";
-        }
-        else
-        {
-
-        }
+        healtText.text = "Health " + health.ToString() + "/100";
+        strengthText.text = "Strength " + strength.ToString() + "/100";
     }
 
     public int GetStrengt()

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
 public class BlueEnemy : MonoBehaviour
 {
     private int health = 100;
@@ -22,7 +21,7 @@ public class BlueEnemy : MonoBehaviour
 
     void Update()
     {
-        nav.SetDestination(player.position); 
+        nav.SetDestination(player.transform.position);
 
         if (Time.timeSinceLevelLoad - timeAttack > timer)
         {

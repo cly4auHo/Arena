@@ -1,33 +1,41 @@
-﻿using UnityEngine.AI;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RedEnemy : MonoBehaviour
 {
     private int health = 50;
     private int damage = 15;
-    private Transform playerPosition;
-    private NavMeshAgent nav;
-    private Player player;
+    [SerializeField] private float speed = 5;
+
+    private Vector3 playerPosition;
+    private Transform player;
+    private Rigidbody rb;
+    private Player playerHit;
     private const string playerTag = "Player";
 
-    private float timeOut = 5;
+    private float timeOut = 5f;
+    private float timer;
+    private float jumpHight = 3;
+    private float jumpSpeed = 5f;
 
-
-    void Awake()
+    void Start()
     {
-        playerPosition = GameObject.FindGameObjectWithTag(playerTag).transform;
-        nav = GetComponent<NavMeshAgent>();
+        player = GameObject.FindGameObjectWithTag(playerTag).transform;
+        rb = GetComponent<Rigidbody>();
+
+        timer = Time.timeSinceLevelLoad;
     }
-  
+
     void Update()
     {
-        if (Time.timeSinceLevelLoad < timeOut)
+        if (Time.timeSinceLevelLoad - timer < timeOut)
         {
-            nav.SetDestination(playerPosition.position);
+
         }
         else
         {
-
+            playerPosition = player.position;
+            rb.velocity = (playerPosition - transform.position).normalized * speed;
+            transform.LookAt(playerPosition);
         }
     }
 
@@ -35,11 +43,11 @@ public class RedEnemy : MonoBehaviour
     {
         if (other.CompareTag(playerTag))
         {
-            player = other.GetComponent<Player>();
+            playerHit = other.GetComponent<Player>();
 
             if (player)
             {
-                player.SetStrengt(Mathf.Min(player.GetHealth() - damage, 0));
+                playerHit.SetHealth(Mathf.Min(playerHit.GetHealth() - damage, 0));
             }
 
             Destroy(gameObject);

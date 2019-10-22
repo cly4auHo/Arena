@@ -29,7 +29,7 @@ public class EnemyBullet : MonoBehaviour
         else
         {
             transform.LookAt(targetPosition);
-            transform.Translate(0, 0, speed * Time.deltaTime);
+            rb.velocity = (targetPosition - transform.position).normalized * speed;
 
             if (transform.position == targetPosition)
             {

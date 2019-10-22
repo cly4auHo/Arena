@@ -12,25 +12,43 @@ public class EnemyCreator : MonoBehaviour
     private GameObject currentRedEnemy;
     private GameObject currentBlueEnemy;
 
+    private Vector3 EnemyPosition;
+    private float yHightBlue = 1.25f;
+    private float yHightRed = 0.75f;
+    private float xTop = 2.5f;
+    private float xBot = -2.5f;
+    private float zLeft = -2.5f;
+    private float zRight = 2.5f;
+
     void Start()
     {
         timeOfSpawn = 5f;
         timer = 0;
     }
 
-    //void Update()
-    //{
-    //    if (Time.timeSinceLevelLoad - timer > timeOfSpawn)
-    //    {
-    //        for (int i = 0; i < 4; i++)
-    //        {
-    //            currentRedEnemy = Instantiate(RedEnemyPrefab, Vector3.zero, Quaternion.identity);
-    //        }
-    //        currentBlueEnemy = Instantiate(BlueEnemyPrefab, Vector3.zero, Quaternion.identity);
+    void Update()
+    {
+        if (Time.timeSinceLevelLoad - timer > timeOfSpawn)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                currentRedEnemy = Instantiate(RedEnemyPrefab, RandomPositionRed(), Quaternion.identity);
+            }
+            currentBlueEnemy = Instantiate(BlueEnemyPrefab, RandomPositionBlue(), Quaternion.identity);
 
-    //        ChangeTime();
-    //    }
-    //}
+            ChangeTime();
+        }
+    }
+
+    Vector3 RandomPositionRed()
+    {
+        return new Vector3(Random.Range(xTop, xBot), yHightRed, Random.Range(zLeft, zRight));
+    }
+
+    Vector3 RandomPositionBlue()
+    {
+        return new Vector3(Random.Range(xTop, xBot), yHightBlue, Random.Range(zLeft, zRight));
+    }
 
     private void ChangeTime()
     {
