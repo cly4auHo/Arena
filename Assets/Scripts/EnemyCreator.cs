@@ -30,7 +30,7 @@ public class EnemyCreator : MonoBehaviour
 
     void Update()
     {
-        if (!player.IsPaused() && player.GetHealth() > 0 && Time.timeSinceLevelLoad - timer > timeOfSpawn)
+        if (!player.IsPaused() && player.GetHealth() >= 0 && Time.timeSinceLevelLoad - timer > timeOfSpawn)
         {
             for (int i = 0; i < 4; i++)
             {

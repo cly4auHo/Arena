@@ -11,14 +11,14 @@ public class Bullet : MonoBehaviour
 
     private int chanseOfRicochet;
     private int healing = 50;
+    private int fullHp = 100;
+    private int fullStrengt = 100;
     private int strengthUpRicochet = 10;
 
     private const string RedEnemyTag = "RedEnemy";
     private const string BlueEnemyTag = "BlueEnemy";
     private int redStrengthUp = 15;
     private int blueStrengthUp = 50;
-    private int fullHp = 100;
-    private int fullStrengt = 100;
 
     void Start()
     {
@@ -114,7 +114,8 @@ public class Bullet : MonoBehaviour
 
     private Transform ChoseNearestTarget(GameObject[] RedEnemies, GameObject[] BlueEnemies)
     {
-        Transform bestTarget = null;
+        Transform bestTargetRed = null;
+        Transform bestTargetBlue = null;
         float closestDistanceSqr = Mathf.Infinity;
         Vector3 currentPosition = transform.position;
 
@@ -127,21 +128,28 @@ public class Bullet : MonoBehaviour
             if (dSqrToTarget < closestDistanceSqr)
             {
                 closestDistanceSqr = dSqrToTarget;
-                bestTarget = potentialTarget.transform;
+                bestTargetRed = potentialTarget.transform;
             }
         }
         foreach (GameObject potentialTarget in BlueEnemies)
         {
-            bestTarget.position = potentialTarget.transform.position - currentPosition;
-            float dSqrToTarget = bestTarget.position.sqrMagnitude;
+            Vector3 directionToTarget = potentialTarget.transform.position - currentPosition;
+            float dSqrToTarget = directionToTarget.sqrMagnitude;
 
             if (dSqrToTarget < closestDistanceSqr)
             {
                 closestDistanceSqr = dSqrToTarget;
-                bestTarget = potentialTarget.transform;
+                bestTargetBlue = potentialTarget.transform;
             }
         }
 
-        return bestTarget;
+        if (bestTargetBlue.position.sqrMagnitude <= bestTargetRed.position.sqrMagnitude)
+        {
+            return bestTargetBlue;
+        }
+        else
+        {
+            return bestTargetRed;
+        }
     }
 }

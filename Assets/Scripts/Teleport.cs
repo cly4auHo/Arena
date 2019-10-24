@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class Teleport : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Player player;
+    private EnemyBullet enemyBullet;
+
     void Start()
     {
-        
+        player = FindObjectOfType<Player>();
+        enemyBullet = FindObjectOfType<EnemyBullet>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter(Collider other)
     {
-        
+
+    }
+
+    void NewPosition()
+    {
+
     }
 }

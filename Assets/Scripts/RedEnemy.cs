@@ -5,18 +5,18 @@ public class RedEnemy : MonoBehaviour
     private int health = 50;
     private int damage = 15;
     [SerializeField] private float speed = 3.5f;
-    private float yTop = 5f;
 
     private Vector3 myPosition;
     private Transform playerPosition;
     private Rigidbody rb;
+
     private Player player;
     private const string playerTag = "Player";
 
     private Transform currentPosition;
     private float timeOut = 5f;
     private float timer;
-    private float jumpHight = 3;
+    private float jumpHight = 5f;
 
     void Start()
     {
@@ -31,9 +31,13 @@ public class RedEnemy : MonoBehaviour
     {
         if (Time.timeSinceLevelLoad - timer < timeOut)
         {
-            if (currentPosition.position.y != yTop)
+            if (currentPosition.position.y < jumpHight)
             {
-
+                rb.velocity = Vector3.up * speed;
+            }
+            else
+            {
+                rb.velocity = Vector3.zero;
             }
         }
         else
@@ -52,7 +56,7 @@ public class RedEnemy : MonoBehaviour
 
             if (playerPosition)
             {
-                player.SetHealth(Mathf.Min(player.GetHealth() - damage, 0));
+                player.SetHealth(Mathf.Max(player.GetHealth() - damage, 0));
             }
 
             Destroy(gameObject);
