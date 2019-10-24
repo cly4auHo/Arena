@@ -2,6 +2,7 @@
 
 public class EnemyCreator : MonoBehaviour
 {
+    private Player player;
     private float timeOfSpawn = 5f;
     private float timer = 0;
     private float minTime = 2f;
@@ -9,12 +10,12 @@ public class EnemyCreator : MonoBehaviour
 
     [SerializeField] private GameObject RedEnemyPrefab;
     [SerializeField] private GameObject BlueEnemyPrefab;
-    private GameObject currentRedEnemy;
-    private GameObject currentBlueEnemy;
+    private GameObject CurrentRedEnemy;
+    private GameObject CurrentBlueEnemy;
 
     private Vector3 EnemyPosition;
     private float yHightBlue = 1.25f;
-    private float yHightRed = 0.75f;
+    private float yHightRed = 1.1f;
     private float xTop = 2.5f;
     private float xBot = -2.5f;
     private float zLeft = -2.5f;
@@ -22,19 +23,20 @@ public class EnemyCreator : MonoBehaviour
 
     void Start()
     {
+        player = FindObjectOfType<Player>();
         timeOfSpawn = 5f;
         timer = 0;
     }
 
     void Update()
     {
-        if (Time.timeSinceLevelLoad - timer > timeOfSpawn)
+        if (!player.IsPaused() && player.GetHealth() > 0 && Time.timeSinceLevelLoad - timer > timeOfSpawn)
         {
             for (int i = 0; i < 4; i++)
             {
-                currentRedEnemy = Instantiate(RedEnemyPrefab, RandomPositionRed(), Quaternion.identity);
+                CurrentRedEnemy = Instantiate(RedEnemyPrefab, RandomPositionRed(), Quaternion.identity);
             }
-            currentBlueEnemy = Instantiate(BlueEnemyPrefab, RandomPositionBlue(), Quaternion.identity);
+            CurrentBlueEnemy = Instantiate(BlueEnemyPrefab, RandomPositionBlue(), Quaternion.identity);
 
             ChangeTime();
         }

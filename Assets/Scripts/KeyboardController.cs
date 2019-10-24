@@ -5,7 +5,7 @@ public class KeyboardController : MonoBehaviour
     private CharacterController charController;
 
     [SerializeField] private float speed = 2.5f;
-    private float gravity = -9.8f;
+    private float gravity = -3f;
   
     private float deltaX;
     private float deltaZ;
@@ -24,7 +24,12 @@ public class KeyboardController : MonoBehaviour
 
         movement = Vector3.ClampMagnitude(movement, speed);
         movement = transform.TransformDirection(movement);
-        movement.y = gravity;
+
+        if (!charController.isGrounded)
+        {
+            movement.y = gravity;
+        }
+
         movement *= Time.deltaTime;
 
         charController.Move(movement);

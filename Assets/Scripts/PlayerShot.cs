@@ -11,7 +11,6 @@ public class PlayerShot : MonoBehaviour
     private GameObject currentBullet;
 
     private Player player;
-    private GameManager gm;
     private const string RedEnemyTag = "RedEnemy";
     private const string BlueEnemyTag = "BlueEnemy";
     private int fullStrengt = 100;
@@ -19,11 +18,7 @@ public class PlayerShot : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<Player>();
-        gm = FindObjectOfType<GameManager>();
-
         camera = GetComponent<Camera>();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     void Update()
@@ -34,22 +29,19 @@ public class PlayerShot : MonoBehaviour
             currentBullet.transform.position = transform.TransformPoint(Vector3.forward);
             currentBullet.transform.rotation = transform.rotation;
         }
-        else if (Input.GetMouseButtonDown(1)) // Ult
+        else if (Input.GetMouseButtonDown(1) && player.GetStrengt() >= fullStrengt) // Ult
         {
-            if (player.GetStrengt() >= fullStrengt)
-            {
-                player.SetStrengt(0);
+            player.SetStrengt(0);
 
-                foreach (GameObject RedEnemies in GameObject.FindGameObjectsWithTag(RedEnemyTag))
-                {
-                    Destroy(RedEnemies);
-                    gm.ScoreUp();
-                }
-                foreach (GameObject BlueEnemies in GameObject.FindGameObjectsWithTag(BlueEnemyTag))
-                {
-                    Destroy(BlueEnemies);
-                    gm.ScoreUp();
-                }
+            foreach (GameObject RedEnemies in GameObject.FindGameObjectsWithTag(RedEnemyTag))
+            {
+                Destroy(RedEnemies);
+                player.ScoreUp();
+            }
+            foreach (GameObject BlueEnemies in GameObject.FindGameObjectsWithTag(BlueEnemyTag))
+            {
+                Destroy(BlueEnemies);
+                player.ScoreUp();
             }
         }
     }

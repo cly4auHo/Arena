@@ -4,23 +4,25 @@ public class RedEnemy : MonoBehaviour
 {
     private int health = 50;
     private int damage = 15;
-    [SerializeField] private float speed = 5;
+    [SerializeField] private float speed = 3.5f;
+    private float yTop = 5f;
 
-    private Vector3 playerPosition;
-    private Transform player;
+    private Vector3 myPosition;
+    private Transform playerPosition;
     private Rigidbody rb;
-    private Player playerHit;
+    private Player player;
     private const string playerTag = "Player";
 
+    private Transform currentPosition;
     private float timeOut = 5f;
     private float timer;
     private float jumpHight = 3;
-    private float jumpSpeed = 5f;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag(playerTag).transform;
+        playerPosition = GameObject.FindGameObjectWithTag(playerTag).transform;
         rb = GetComponent<Rigidbody>();
+        currentPosition = GetComponent<Transform>();
 
         timer = Time.timeSinceLevelLoad;
     }
@@ -29,13 +31,16 @@ public class RedEnemy : MonoBehaviour
     {
         if (Time.timeSinceLevelLoad - timer < timeOut)
         {
+            if (currentPosition.position.y != yTop)
+            {
 
+            }
         }
         else
         {
-            playerPosition = player.position;
-            rb.velocity = (playerPosition - transform.position).normalized * speed;
-            transform.LookAt(playerPosition);
+            myPosition = playerPosition.position;
+            rb.velocity = (myPosition - transform.position).normalized * speed;
+            transform.LookAt(myPosition);
         }
     }
 
@@ -43,11 +48,11 @@ public class RedEnemy : MonoBehaviour
     {
         if (other.CompareTag(playerTag))
         {
-            playerHit = other.GetComponent<Player>();
+            player = other.GetComponent<Player>();
 
-            if (player)
+            if (playerPosition)
             {
-                playerHit.SetHealth(Mathf.Min(playerHit.GetHealth() - damage, 0));
+                player.SetHealth(Mathf.Min(player.GetHealth() - damage, 0));
             }
 
             Destroy(gameObject);
