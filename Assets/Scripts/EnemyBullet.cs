@@ -28,8 +28,8 @@ public class EnemyBullet : MonoBehaviour
         }
         else
         {
-            transform.LookAt(targetPosition);
             rb.velocity = (targetPosition - transform.position).normalized * speed;
+            transform.LookAt(targetPosition);
 
             if (transform.position == targetPosition)
             {

@@ -5,9 +5,11 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float speed = 10f;
     [SerializeField] private int damage = 25;
 
-    private BlueEnemy blueEnemy;
+    private BlueEnemy blueEnemy; // for trigger
     private RedEnemy redEnemy;
     private Player player;
+    private BlueEnemy[] blueEnemies; // for ricochet
+    private RedEnemy[] redEnemies;
 
     private int chanseOfRicochet;
     private int healing = 50;
@@ -37,7 +39,7 @@ public class Bullet : MonoBehaviour
         {
             redEnemy = other.GetComponent<RedEnemy>();
 
-            if (redEnemy && redEnemy.GetHealth() > damage)
+            if (redEnemy.GetHealth() > damage)
             {
                 redEnemy.SetHealth(redEnemy.GetHealth() - damage);
             }
@@ -61,7 +63,7 @@ public class Bullet : MonoBehaviour
         {
             blueEnemy = other.GetComponent<BlueEnemy>();
 
-            if (blueEnemy && blueEnemy.GetHealth() > damage)
+            if (blueEnemy.GetHealth() > damage)
             {
                 blueEnemy.SetHealth(blueEnemy.GetHealth() - damage);
             }
@@ -87,69 +89,103 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    void Ricochet()
+    private void Ricochet()
     {
-        GameObject[] RedEnemies = GameObject.FindGameObjectsWithTag(RedEnemyTag);
-        GameObject[] BlueEnemies = GameObject.FindGameObjectsWithTag(BlueEnemyTag);
+        redEnemies = FindObjectsOfType<RedEnemy>();
+        blueEnemies = FindObjectsOfType<BlueEnemy>();
 
-        if (RedEnemies.Length == 0 || BlueEnemies.Length == 0)
+        if (redEnemies.Length == 0 || blueEnemies.Length == 0)
         {
             Destroy(gameObject);
             return;
         }
 
-        transform.LookAt(ChoseNearestTarget(RedEnemies, BlueEnemies));
+        ChoseNearestTarget(redEnemies, blueEnemies);
+    }
 
+    private void ChoseNearestTarget(RedEnemy[] RedEnemies, BlueEnemy[] BlueEnemies)
+    {
+        Transform nearestTargetRed = RedEnemies[0].transform;
+        Transform nearestTargetBlue = BlueEnemies[0].transform;
+        int nearestRed = 0;
+        int nearestBlue = 0;
+
+        Vector3 currentPosition = transform.position; // for bullet in this time
+        Vector3 directionToTarget = Vector3.zero;
+        float closestDistanceSqr = Mathf.Infinity;
+        float dSqrToTarget = 0; // modul of directionToTarget
+
+        for (int i = 0; i < RedEnemies.Length - 1; i++) // chose nearest redEnemy
+        {
+            directionToTarget = RedEnemies[i].transform.position - currentPosition;
+            dSqrToTarget = directionToTarget.sqrMagnitude;
+
+            if (dSqrToTarget < closestDistanceSqr)
+            {
+                closestDistanceSqr = dSqrToTarget;
+                nearestTargetRed = RedEnemies[i].transform;
+                nearestRed = i;
+            }
+        }
+
+        for (int i = 0; i < BlueEnemies.Length - 1; i++) //chose nearest blueEnemy
+        {
+            directionToTarget = BlueEnemies[i].transform.position - currentPosition;
+            dSqrToTarget = directionToTarget.sqrMagnitude;
+
+            if (dSqrToTarget < closestDistanceSqr)
+            {
+                closestDistanceSqr = dSqrToTarget;
+                nearestTargetBlue = BlueEnemies[i].transform;
+                nearestBlue = i;
+            }
+        }
+
+        if (nearestTargetBlue.position.sqrMagnitude < nearestTargetRed.position.sqrMagnitude)
+        {
+            if (BlueEnemies[nearestBlue].GetHealth() > damage)
+            {
+                BlueEnemies[nearestBlue].SetHealth(BlueEnemies[nearestBlue].GetHealth() - damage);
+                Destroy(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+                Destroy(BlueEnemies[nearestBlue]);
+                player.ScoreUp();
+                player.SetStrengt(Mathf.Min(player.GetStrengt() + blueStrengthUp, fullStrengt));
+                HealOrStrengtUp();
+            }
+        }
+        else
+        {
+            if (RedEnemies[nearestRed].GetHealth() > damage)
+            {
+                RedEnemies[nearestRed].SetHealth(RedEnemies[nearestRed].GetHealth() - damage);
+                Destroy(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+                Destroy(RedEnemies[nearestRed]);
+                player.ScoreUp();
+                player.SetStrengt(Mathf.Min(player.GetStrengt() + redStrengthUp, fullStrengt));
+                HealOrStrengtUp();
+            }
+        }
+    }
+
+    private void HealOrStrengtUp()
+    {
         int chanseOfHeal = Random.Range(0, 1);
 
-        if (chanseOfHeal == 0) //healing or strengtUp
+        if (chanseOfHeal == 0) 
         {
             player.SetHealth(Mathf.Min(player.GetHealth() + healing, fullHp));
         }
         else
         {
             player.SetStrengt(Mathf.Min(player.GetStrengt() + strengthUpRicochet, fullStrengt));
-        }
-    }
-
-    private Transform ChoseNearestTarget(GameObject[] RedEnemies, GameObject[] BlueEnemies)
-    {
-        Transform bestTargetRed = null;
-        Transform bestTargetBlue = null;
-        float closestDistanceSqr = Mathf.Infinity;
-        Vector3 currentPosition = transform.position;
-
-
-        foreach (GameObject potentialTarget in RedEnemies)
-        {
-            Vector3 directionToTarget = potentialTarget.transform.position - currentPosition;
-            float dSqrToTarget = directionToTarget.sqrMagnitude;
-
-            if (dSqrToTarget < closestDistanceSqr)
-            {
-                closestDistanceSqr = dSqrToTarget;
-                bestTargetRed = potentialTarget.transform;
-            }
-        }
-        foreach (GameObject potentialTarget in BlueEnemies)
-        {
-            Vector3 directionToTarget = potentialTarget.transform.position - currentPosition;
-            float dSqrToTarget = directionToTarget.sqrMagnitude;
-
-            if (dSqrToTarget < closestDistanceSqr)
-            {
-                closestDistanceSqr = dSqrToTarget;
-                bestTargetBlue = potentialTarget.transform;
-            }
-        }
-
-        if (bestTargetBlue.position.sqrMagnitude <= bestTargetRed.position.sqrMagnitude)
-        {
-            return bestTargetBlue;
-        }
-        else
-        {
-            return bestTargetRed;
         }
     }
 }

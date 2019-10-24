@@ -13,14 +13,14 @@ public class Player : MonoBehaviour
     [SerializeField] private Text scoreText;
     [SerializeField] private Text pauseText;
     [SerializeField] private Text fullScore;
-    [SerializeField] private GameObject menu;
+    [SerializeField] private GameObject menuDeath;
 
     private const string RedEnemyTag = "RedEnemy";
     private const string BlueEnemyTag = "BlueEnemy";
 
     void Start()
     {
-        menu.SetActive(false);
+        menuDeath.SetActive(false);
         score = 0;
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
         }
         else //death 
         {
-            menu.SetActive(true);
+            menuDeath.SetActive(true);
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -76,6 +76,8 @@ public class Player : MonoBehaviour
 
     public void Restart()
     {
+        score = 0;
+
         foreach (GameObject RedEnemies in GameObject.FindGameObjectsWithTag(RedEnemyTag))
         {
             Destroy(RedEnemies);

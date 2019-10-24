@@ -16,10 +16,13 @@ public class Teleport : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
 
+
+        enemyBullet.AfterTeleport(NewPosition());
     }
 
-    void NewPosition()
+    Vector3 NewPosition()
     {
 
+        return Vector3.zero;
     }
 }
