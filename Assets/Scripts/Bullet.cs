@@ -50,14 +50,8 @@ public class Bullet : MonoBehaviour
                 player.SetStrengt(Mathf.Min(player.GetStrengt() + redStrengthUp, fullStrengt));
             }
 
-            if (player.GetHealth() < chanseOfRicochet) //than less hp, than more chance to ricochet
-            {
-                Ricochet();
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            Ricochet();
+
         }
         else if (other.CompareTag(BlueEnemyTag))
         {
@@ -74,14 +68,8 @@ public class Bullet : MonoBehaviour
                 player.SetStrengt(Mathf.Min(player.GetStrengt() + blueStrengthUp, fullStrengt));
             }
 
-            if (player.GetHealth() < chanseOfRicochet)
-            {
-                Ricochet();
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            Ricochet();
+
         }
         else
         {
@@ -91,6 +79,12 @@ public class Bullet : MonoBehaviour
 
     private void Ricochet()
     {
+        if (player.GetHealth() > chanseOfRicochet) //than less hp than more chance of ricochet
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         redEnemies = FindObjectsOfType<RedEnemy>();
         blueEnemies = FindObjectsOfType<BlueEnemy>();
 

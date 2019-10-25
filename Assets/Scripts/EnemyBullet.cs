@@ -5,6 +5,7 @@ public class EnemyBullet : MonoBehaviour
     [SerializeField] private float speed = 3f;
     private int strengthDamage = 25;
     private Rigidbody rb;
+    private SphereCollider collider;
 
     private Player player;
     private Transform target;
@@ -16,8 +17,10 @@ public class EnemyBullet : MonoBehaviour
 
     void Start()
     {
-        target = GameObject.FindGameObjectWithTag(PlayerTag).transform;
         rb = GetComponent<Rigidbody>();
+        collider = GetComponent<SphereCollider>();
+        target = GameObject.FindGameObjectWithTag(PlayerTag).transform;
+
     }
 
     void Update()
@@ -33,7 +36,7 @@ public class EnemyBullet : MonoBehaviour
             rb.velocity = (newPosition - transform.position).normalized * speed;
             transform.LookAt(newPosition);
 
-            if (transform.position == newPosition)
+            if ((newPosition - transform.position).magnitude < 0.5f) //near of tp zone
             {
                 Destroy(gameObject);
             }
@@ -43,6 +46,7 @@ public class EnemyBullet : MonoBehaviour
     public void AfterTeleport(Transform newPosition)
     {
         isTeleport = true;
+        collider.enabled = false;
         this.newPosition = newPosition.position;
     }
 
