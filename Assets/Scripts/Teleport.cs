@@ -15,7 +15,7 @@ public class Teleport : MonoBehaviour
             player = other.GetComponent<Player>();
             enemyBullets = FindObjectsOfType<EnemyBullet>();
 
-            player.transform.rotation = NewPosition(TeleportZones).rotation;
+            other.transform.rotation = NewPosition(TeleportZones).rotation;
             other.transform.position = NewPosition(TeleportZones).position;
 
             if (enemyBullets.Length != 0)
