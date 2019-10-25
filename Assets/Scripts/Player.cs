@@ -14,13 +14,20 @@ public class Player : MonoBehaviour
     [SerializeField] private Text pauseText;
     [SerializeField] private Text fullScore;
     [SerializeField] private GameObject menuDeath;
+    [SerializeField] private GameObject menuPause;
 
     private const string RedEnemyTag = "RedEnemy";
     private const string BlueEnemyTag = "BlueEnemy";
 
+    private Camera camera;
+    private int size = 12;
+    private float posX;
+    private float posY;
+
     void Start()
     {
         menuDeath.SetActive(false);
+        menuPause.SetActive(false);
         score = 0;
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -29,7 +36,9 @@ public class Player : MonoBehaviour
         healtText.enabled = true;
         strengthText.enabled = true;
         scoreText.enabled = true;
-        pauseText.enabled = false;
+
+        camera = GetComponentInChildren<Camera>();
+
     }
 
     void Update()
@@ -50,8 +59,6 @@ public class Player : MonoBehaviour
                 {
                     Resume();
                 }
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
             }
         }
         else //death 
@@ -66,6 +73,15 @@ public class Player : MonoBehaviour
             scoreText.enabled = false;
 
             fullScore.text = "Очков набрано :" + score.ToString();
+
+            foreach (GameObject RedEnemies in GameObject.FindGameObjectsWithTag(RedEnemyTag))
+            {
+                Destroy(RedEnemies);
+            }
+            foreach (GameObject BlueEnemies in GameObject.FindGameObjectsWithTag(BlueEnemyTag))
+            {
+                Destroy(BlueEnemies);
+            }
         }
     }
 
@@ -78,30 +94,40 @@ public class Player : MonoBehaviour
     {
         score = 0;
 
-        foreach (GameObject RedEnemies in GameObject.FindGameObjectsWithTag(RedEnemyTag))
-        {
-            Destroy(RedEnemies);
-        }
-        foreach (GameObject BlueEnemies in GameObject.FindGameObjectsWithTag(BlueEnemyTag))
-        {
-            Destroy(BlueEnemies);
-        }
-
         Application.LoadLevel(Application.loadedLevel);
+        Time.timeScale = 1f;
     }
 
     void Pause()
     {
+        menuPause.SetActive(true);
         pause = true;
-        pauseText.enabled = true;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         Time.timeScale = 0f;
     }
 
     void Resume()
     {
+        menuPause.SetActive(false);
         pause = false;
-        pauseText.enabled = false;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         Time.timeScale = 1f;
+    }
+
+    void OnGUI()
+    {
+        if (!pause)
+        {
+            posX = camera.pixelWidth / 2 - size / 4;
+            posY = camera.pixelHeight / 2 - size / 2;
+            GUI.Label(new Rect(posX, posY, size, size), "*");
+        }
     }
 
     public int GetStrengt()

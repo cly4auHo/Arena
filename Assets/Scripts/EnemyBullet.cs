@@ -4,13 +4,15 @@ public class EnemyBullet : MonoBehaviour
 {
     [SerializeField] private float speed = 3f;
     private int strengthDamage = 25;
-    private Transform target;
-    private Vector3 targetPosition;
     private Rigidbody rb;
 
-    private const string PlayerTag = "Player";
     private Player player;
+    private Transform target;
+    private Vector3 targetPosition;
+    private const string PlayerTag = "Player";
+
     private bool isTeleport = false;
+    Vector3 newPosition;
 
     void Start()
     {
@@ -28,20 +30,20 @@ public class EnemyBullet : MonoBehaviour
         }
         else
         {
-            rb.velocity = (targetPosition - transform.position).normalized * speed;
-            transform.LookAt(targetPosition);
+            rb.velocity = (newPosition - transform.position).normalized * speed;
+            transform.LookAt(newPosition);
 
-            if (transform.position == targetPosition)
+            if (transform.position == newPosition)
             {
                 Destroy(gameObject);
             }
         }
     }
 
-    public void AfterTeleport(Vector3 newPosition)
+    public void AfterTeleport(Transform newPosition)
     {
         isTeleport = true;
-        targetPosition = newPosition;
+        this.newPosition = newPosition.position;
     }
 
     void OnTriggerEnter(Collider other)

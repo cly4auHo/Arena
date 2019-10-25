@@ -4,7 +4,7 @@ public class RedEnemy : MonoBehaviour
 {
     private int health = 50;
     private int damage = 15;
-    [SerializeField] private float speed = 3.5f;
+    [SerializeField] private float speed = 2f;
 
     private Vector3 myPosition;
     private Transform playerPosition;
@@ -16,7 +16,7 @@ public class RedEnemy : MonoBehaviour
     private Transform currentPosition;
     private float timeOut = 5f;
     private float timer;
-    private float jumpHight = 5f;
+    private float jumpHight = 3.5f;
 
     void Start()
     {

@@ -1,28 +1,50 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Teleport : MonoBehaviour
 {
     private Player player;
-    private EnemyBullet enemyBullet;
+    private EnemyBullet[] enemyBullets;
 
-    void Start()
-    {
-        player = FindObjectOfType<Player>();
-        enemyBullet = FindObjectOfType<EnemyBullet>();
-    }
+    [SerializeField] private Transform[] TeleportZones;
+    private const string PlayerTag = "Player";
 
     void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag(PlayerTag))
+        {
+            player = other.GetComponent<Player>();
+            enemyBullets = FindObjectsOfType<EnemyBullet>();
 
+            player.transform.rotation = NewPosition(TeleportZones).rotation;
+            other.transform.position = NewPosition(TeleportZones).position;
 
-        enemyBullet.AfterTeleport(NewPosition());
+            if (enemyBullets.Length != 0)
+            {
+                foreach (EnemyBullet bullets in enemyBullets)
+                {
+                    bullets.AfterTeleport(NewPosition(TeleportZones));
+                }
+            }
+        }
     }
 
-    Vector3 NewPosition()
+    private Transform NewPosition(Transform[] TeleportZones)
     {
+        Transform bestTarget = null;
+        float farDistanceSqr = 0;
+        Vector3 currentPosition = player.transform.position;
 
-        return Vector3.zero;
+        foreach (Transform potentialTarget in TeleportZones)
+        {
+            Vector3 directionToTarget = potentialTarget.position - currentPosition;
+            float dSqrToTarget = directionToTarget.sqrMagnitude;
+
+            if (dSqrToTarget > farDistanceSqr)
+            {
+                farDistanceSqr = dSqrToTarget;
+                bestTarget = potentialTarget;
+            }
+        }
+        return bestTarget;
     }
 }

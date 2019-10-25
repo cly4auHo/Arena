@@ -2,11 +2,6 @@
 
 public class PlayerShot : MonoBehaviour
 {
-    private Camera camera;
-    private int size = 12;
-    private float posX;
-    private float posY;
-
     [SerializeField] private GameObject bulletPrefab;
     private GameObject currentBullet;
 
@@ -18,7 +13,6 @@ public class PlayerShot : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<Player>();
-        camera = GetComponent<Camera>();
     }
 
     void Update()
@@ -44,12 +38,5 @@ public class PlayerShot : MonoBehaviour
                 player.ScoreUp();
             }
         }
-    }
-
-    void OnGUI()
-    {
-        posX = camera.pixelWidth / 2 - size / 4;
-        posY = camera.pixelHeight / 2 - size / 2;
-        GUI.Label(new Rect(posX, posY, size, size), "*");
     }
 }

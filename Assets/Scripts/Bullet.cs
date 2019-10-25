@@ -39,7 +39,7 @@ public class Bullet : MonoBehaviour
         {
             redEnemy = other.GetComponent<RedEnemy>();
 
-            if (redEnemy.GetHealth() > damage)
+            if (redEnemy && redEnemy.GetHealth() > damage)
             {
                 redEnemy.SetHealth(redEnemy.GetHealth() - damage);
             }
@@ -63,7 +63,7 @@ public class Bullet : MonoBehaviour
         {
             blueEnemy = other.GetComponent<BlueEnemy>();
 
-            if (blueEnemy.GetHealth() > damage)
+            if (blueEnemy && blueEnemy.GetHealth() > damage)
             {
                 blueEnemy.SetHealth(blueEnemy.GetHealth() - damage);
             }
@@ -111,14 +111,12 @@ public class Bullet : MonoBehaviour
         int nearestBlue = 0;
 
         Vector3 currentPosition = transform.position; // for bullet in this time
-        Vector3 directionToTarget = Vector3.zero;
         float closestDistanceSqr = Mathf.Infinity;
-        float dSqrToTarget = 0; // modul of directionToTarget
 
         for (int i = 0; i < RedEnemies.Length - 1; i++) // chose nearest redEnemy
         {
-            directionToTarget = RedEnemies[i].transform.position - currentPosition;
-            dSqrToTarget = directionToTarget.sqrMagnitude;
+            Vector3 directionToTarget = RedEnemies[i].transform.position - currentPosition;
+            float dSqrToTarget = directionToTarget.sqrMagnitude;
 
             if (dSqrToTarget < closestDistanceSqr)
             {
@@ -130,8 +128,8 @@ public class Bullet : MonoBehaviour
 
         for (int i = 0; i < BlueEnemies.Length - 1; i++) //chose nearest blueEnemy
         {
-            directionToTarget = BlueEnemies[i].transform.position - currentPosition;
-            dSqrToTarget = directionToTarget.sqrMagnitude;
+            Vector3 directionToTarget = BlueEnemies[i].transform.position - currentPosition;
+            float dSqrToTarget = directionToTarget.sqrMagnitude;
 
             if (dSqrToTarget < closestDistanceSqr)
             {
@@ -152,6 +150,7 @@ public class Bullet : MonoBehaviour
             {
                 Destroy(gameObject);
                 Destroy(BlueEnemies[nearestBlue]);
+
                 player.ScoreUp();
                 player.SetStrengt(Mathf.Min(player.GetStrengt() + blueStrengthUp, fullStrengt));
                 HealOrStrengtUp();
@@ -168,6 +167,7 @@ public class Bullet : MonoBehaviour
             {
                 Destroy(gameObject);
                 Destroy(RedEnemies[nearestRed]);
+
                 player.ScoreUp();
                 player.SetStrengt(Mathf.Min(player.GetStrengt() + redStrengthUp, fullStrengt));
                 HealOrStrengtUp();
@@ -179,7 +179,7 @@ public class Bullet : MonoBehaviour
     {
         int chanseOfHeal = Random.Range(0, 1);
 
-        if (chanseOfHeal == 0) 
+        if (chanseOfHeal == 0)
         {
             player.SetHealth(Mathf.Min(player.GetHealth() + healing, fullHp));
         }
