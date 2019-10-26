@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Text fullScore;
     [SerializeField] private GameObject menuDeath;
     [SerializeField] private GameObject menuPause;
+    [SerializeField] private GameObject enemyCreator;
 
     private const string RedEnemyTag = "RedEnemy";
     private const string BlueEnemyTag = "BlueEnemy";
@@ -28,6 +29,7 @@ public class Player : MonoBehaviour
     {
         menuDeath.SetActive(false);
         menuPause.SetActive(false);
+        enemyCreator.SetActive(true);
         score = 0;
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -38,7 +40,6 @@ public class Player : MonoBehaviour
         scoreText.enabled = true;
 
         camera = GetComponentInChildren<Camera>();
-
     }
 
     void Update()
@@ -64,6 +65,7 @@ public class Player : MonoBehaviour
         else //death 
         {
             menuDeath.SetActive(true);
+            enemyCreator.SetActive(false);
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -101,6 +103,7 @@ public class Player : MonoBehaviour
     void Pause()
     {
         menuPause.SetActive(true);
+        enemyCreator.SetActive(false);
         pause = true;
 
         Cursor.lockState = CursorLockMode.None;
@@ -112,6 +115,7 @@ public class Player : MonoBehaviour
     void Resume()
     {
         menuPause.SetActive(false);
+        enemyCreator.SetActive(true);
         pause = false;
 
         Cursor.lockState = CursorLockMode.Locked;

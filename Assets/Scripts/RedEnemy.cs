@@ -62,7 +62,6 @@ public class RedEnemy : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     public void SetHealth(int health)
     {
         this.health = health;

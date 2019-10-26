@@ -37,7 +37,6 @@ public class BlueEnemy : MonoBehaviour
     {
         timer = Time.timeSinceLevelLoad;
     }
-
     public void SetHealth(int health)
     {
         this.health = health;

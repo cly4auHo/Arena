@@ -2,7 +2,6 @@
 
 public class EnemyCreator : MonoBehaviour
 {
-    private Player player;
     private float timeOfSpawn = 5f;
     private float timer = 0;
     private float minTime = 2f;
@@ -23,14 +22,13 @@ public class EnemyCreator : MonoBehaviour
 
     void Start()
     {
-        player = FindObjectOfType<Player>();
         timeOfSpawn = 5f;
         timer = 0;
     }
 
     void Update()
     {
-        if (!player.IsPaused() && player.GetHealth() > 0 && Time.timeSinceLevelLoad - timer > timeOfSpawn)
+        if (Time.timeSinceLevelLoad - timer > timeOfSpawn)
         {
             for (int i = 0; i < 4; i++)
             {
