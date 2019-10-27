@@ -36,50 +36,48 @@ public class Bullet : MonoBehaviour
         {
             RedEnemy red = other.GetComponent<RedEnemy>();
 
-            red.Damage(damage);
-
-            if (red.GetHealth() <= 0)
+            if (!isRicochet)
             {
-                player.StrengtUp(redStrengthUp);
+                red.Damage(damage, redStrengthUp);
+                Ricochet();
             }
-
-            if (isRicochet && red.GetHealth() <= 0)
+            else if (isRicochet && red.GetHealth() <= damage)
             {
-                HealOrStrengtUp();
-                player.StrengtUp(redStrengthUp);
+                red.Damage(damage, redStrengthUp);
                 Destroy(gameObject);
+
+                HealOrStrengtUp();
             }
             else
             {
-                Ricochet();
+                red.Damage(damage, redStrengthUp);
+                Destroy(gameObject);
             }
-
-            Destroy(gameObject);
         }
+
         else if (other.gameObject.name == "BlueEnemy(Clone)")
         {
             BlueEnemy blue = other.GetComponent<BlueEnemy>();
 
-            blue.Damage(damage);
-
-            if (blue.GetHealth() <= 0)
+            if (!isRicochet)
             {
-                player.StrengtUp(blueStrengthUp);
+                blue.Damage(damage, blueStrengthUp);
+                Ricochet();
             }
-
-            if (isRicochet && blue.GetHealth() <= 0)
+            else if (isRicochet && blue.GetHealth() <= damage)
             {
-                player.StrengtUp(blueStrengthUp);
-                HealOrStrengtUp();
+                blue.Damage(damage, blueStrengthUp);
                 Destroy(gameObject);
+
+                HealOrStrengtUp();
             }
             else
             {
-                Ricochet();
+                blue.Damage(damage, blueStrengthUp);
+                Destroy(gameObject);
             }
-
-            Destroy(gameObject);
         }
+
         else
         {
             Destroy(gameObject);
