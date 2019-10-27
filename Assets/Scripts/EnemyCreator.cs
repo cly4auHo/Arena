@@ -10,7 +10,7 @@ public class EnemyCreator : MonoBehaviour
     [SerializeField] private GameObject RedEnemyPrefab;
     [SerializeField] private GameObject BlueEnemyPrefab;
 
-    private float yHight = 3f; //zone where enemies will be instaiate
+    private float yHight = 2.5f; //zone where enemies will be instaiate
     private float xTop = 2.5f;
     private float xBot = -2.5f;
     private float zLeft = -2.5f;

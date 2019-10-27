@@ -6,12 +6,10 @@ public class Bullet : MonoBehaviour
     [SerializeField] private int damage = 25;
 
     private Player player;
-    private GameObject[] enemies;
+    private int fullHp = 100;
 
     private int chanseOfRicochet;
-    private int fullHp = 100;
     private bool isRicochet = false;
-
     private int healing = 50;
     private int strengthUpRicochet = 10;
 
@@ -36,21 +34,19 @@ public class Bullet : MonoBehaviour
         {
             RedEnemy red = other.GetComponent<RedEnemy>();
 
+            red.Damage(damage, redStrengthUp);
+
             if (!isRicochet)
             {
-                red.Damage(damage, redStrengthUp);
                 Ricochet();
             }
-            else if (isRicochet && red.GetHealth() <= damage)
+            else if (isRicochet && red.GetHealth() <= 0)
             {
-                red.Damage(damage, redStrengthUp);
-                Destroy(gameObject);
-
                 HealOrStrengtUp();
+                Destroy(gameObject);
             }
             else
             {
-                red.Damage(damage, redStrengthUp);
                 Destroy(gameObject);
             }
         }
@@ -59,21 +55,19 @@ public class Bullet : MonoBehaviour
         {
             BlueEnemy blue = other.GetComponent<BlueEnemy>();
 
+            blue.Damage(damage, blueStrengthUp);
+
             if (!isRicochet)
             {
-                blue.Damage(damage, blueStrengthUp);
                 Ricochet();
             }
             else if (isRicochet && blue.GetHealth() <= damage)
             {
-                blue.Damage(damage, blueStrengthUp);
-                Destroy(gameObject);
-
                 HealOrStrengtUp();
+                Destroy(gameObject);
             }
             else
             {
-                blue.Damage(damage, blueStrengthUp);
                 Destroy(gameObject);
             }
         }
@@ -92,7 +86,7 @@ public class Bullet : MonoBehaviour
             return;
         }
 
-        enemies = GameObject.FindGameObjectsWithTag(EnemyTag);
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag(EnemyTag);
 
         if (enemies.Length == 0)
         {

@@ -18,10 +18,15 @@ public class Enemy : MonoBehaviour
 
         if (health <= 0)
         {
-            gm.ScoreUp();
-            player.StrengtUp(strengtUp);
-            Destroy(gameObject);
+            Die(strengtUp);
         }
+    }
+
+    private void Die(int strengtUp)
+    {
+        gm.ScoreUp();
+        player.StrengtUp(strengtUp);
+        Destroy(gameObject);
     }
 
     public int GetHealth()
