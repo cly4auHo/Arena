@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     private Player player;
 
     private const string EnemyTag = "Enemy";
+    private const string BulletTag = "Bullet";
 
     void Start()
     {
@@ -55,6 +56,10 @@ public class GameManager : MonoBehaviour
         foreach (GameObject Enemies in GameObject.FindGameObjectsWithTag(EnemyTag))
         {
             Destroy(Enemies);
+        }
+        foreach (GameObject Bullets in GameObject.FindGameObjectsWithTag(BulletTag))
+        {
+            Destroy(Bullets);
         }
     }
 }
