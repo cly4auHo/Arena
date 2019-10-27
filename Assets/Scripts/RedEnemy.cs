@@ -5,15 +5,13 @@ public class RedEnemy : Enemy
     [SerializeField] private float speed = 2f;
     private int damage = 15;
 
-    private Vector3 myPosition;
     private Transform playerPosition;
     private Rigidbody rb;
-
-    private Player player;
-    private const string playerTag = "Player";
-
     private Transform currentPosition;
     private float jumpHight = 3.5f;
+
+    private const string playerTag = "Player";
+
     private float timeOut = 5f;
     private float timer;
 
@@ -52,16 +50,17 @@ public class RedEnemy : Enemy
 
     void Attack()
     {
-        myPosition = playerPosition.position;
-        rb.velocity = (myPosition - transform.position).normalized * speed;
-        transform.LookAt(myPosition);
+        currentPosition.position = playerPosition.position;
+        rb.velocity = (currentPosition.position - transform.position).normalized * speed;
+
+        transform.LookAt(currentPosition.position);
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(playerTag))
         {
-            player = other.GetComponent<Player>();
+            Player player = other.GetComponent<Player>();
 
             if (playerPosition)
             {

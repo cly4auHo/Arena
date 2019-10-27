@@ -9,6 +9,7 @@ public class BlueEnemy : Enemy
 
     [SerializeField] private GameObject enemyBulletPrefab;
     private GameObject currentBullet;
+
     private float timeAttack = 5;
     private float timer = 0;
 
