@@ -5,22 +5,17 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float speed = 10f;
     [SerializeField] private int damage = 25;
 
-    private BlueEnemy blueEnemy; // for trigger
-    private RedEnemy redEnemy;
     private Player player;
-
-    private BlueEnemy[] blueEnemies; // for ricochet
-    private RedEnemy[] redEnemies;
+    private GameObject[] enemies;
 
     private int chanseOfRicochet;
-    private bool isRicochet = false;
-    private int healing = 50;
     private int fullHp = 100;
-    private int fullStrengt = 100;
+    private bool isRicochet = false;
+
+    private int healing = 50;
     private int strengthUpRicochet = 10;
 
-    private const string RedEnemyTag = "RedEnemy";
-    private const string BlueEnemyTag = "BlueEnemy";
+    private const string EnemyTag = "Enemy";
     private int redStrengthUp = 15;
     private int blueStrengthUp = 50;
 
@@ -37,49 +32,53 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(RedEnemyTag))
+        if (other.gameObject.name == "RedEnemy(Clone)")
         {
-            redEnemy = other.GetComponent<RedEnemy>();
+            RedEnemy red = other.GetComponent<RedEnemy>();
 
-            if (redEnemy && redEnemy.GetHealth() > damage)
+            red.Damage(damage);
+
+            if (red.GetHealth() <= 0)
             {
-                redEnemy.SetHealth(redEnemy.GetHealth() - damage);
+                player.StrengtUp(redStrengthUp);
+            }
+
+            if (isRicochet && red.GetHealth() <= 0)
+            {
+                HealOrStrengtUp();
+                player.StrengtUp(redStrengthUp);
+                Destroy(gameObject);
             }
             else
             {
-                Destroy(other.gameObject);
-                player.ScoreUp();
-                player.SetStrengt(Mathf.Min(player.GetStrengt() + redStrengthUp, fullStrengt));
-
-                if (isRicochet)
-                {
-                    HealOrStrengtUp();
-                }
+                Ricochet();
             }
 
-            Ricochet();
+            Destroy(gameObject);
         }
-        else if (other.CompareTag(BlueEnemyTag))
+        else if (other.gameObject.name == "BlueEnemy(Clone)")
         {
-            blueEnemy = other.GetComponent<BlueEnemy>();
+            BlueEnemy blue = other.GetComponent<BlueEnemy>();
 
-            if (blueEnemy && blueEnemy.GetHealth() > damage)
+            blue.Damage(damage);
+
+            if (blue.GetHealth() <= 0)
             {
-                blueEnemy.SetHealth(blueEnemy.GetHealth() - damage);
+                player.StrengtUp(blueStrengthUp);
+            }
+
+            if (isRicochet && blue.GetHealth() <= 0)
+            {
+                player.StrengtUp(blueStrengthUp);
+                HealOrStrengtUp();
+                Destroy(gameObject);
             }
             else
             {
-                Destroy(other.gameObject);
-                player.ScoreUp();
-                player.SetStrengt(Mathf.Min(player.GetStrengt() + blueStrengthUp, fullStrengt));
-
-                if (isRicochet)
-                {
-                    HealOrStrengtUp();
-                }
+                Ricochet();
             }
 
-            Ricochet();
+            Destroy(gameObject);
         }
         else
         {
@@ -95,38 +94,25 @@ public class Bullet : MonoBehaviour
             return;
         }
 
-        redEnemies = FindObjectsOfType<RedEnemy>();
-        blueEnemies = FindObjectsOfType<BlueEnemy>();
+        enemies = GameObject.FindGameObjectsWithTag(EnemyTag);
 
-        if (redEnemies.Length == 0 || blueEnemies.Length == 0)
+        if (enemies.Length == 0)
         {
             Destroy(gameObject);
             return;
         }
 
         isRicochet = true;
-        gameObject.transform.LookAt(ChoseTarget(redEnemies, blueEnemies));
+        gameObject.transform.LookAt(ChoseTarget(enemies));
     }
 
-    private Transform ChoseTarget(RedEnemy[] RedEnemies, BlueEnemy[] BlueEnemies)
+    private Transform ChoseTarget(GameObject[] Enemies)
     {
         Transform bestTarget = null;
         float closestDistanceSqr = Mathf.Infinity;
         Vector3 currentPosition = transform.position;
 
-        foreach (RedEnemy potentialTarget in RedEnemies) //nearest red
-        {
-            Vector3 directionToTarget = potentialTarget.transform.position - currentPosition;
-            float dSqrToTarget = directionToTarget.sqrMagnitude;
-
-            if (dSqrToTarget < closestDistanceSqr)
-            {
-                closestDistanceSqr = dSqrToTarget;
-                bestTarget = potentialTarget.transform;
-            }
-        }
-
-        foreach (BlueEnemy potentialTarget in BlueEnemies) //nearest blue
+        foreach (GameObject potentialTarget in Enemies)
         {
             Vector3 directionToTarget = potentialTarget.transform.position - currentPosition;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
@@ -147,11 +133,11 @@ public class Bullet : MonoBehaviour
 
         if (chanseOfHeal == 0)
         {
-            player.SetHealth(Mathf.Min(player.GetHealth() + healing, fullHp));
+            player.Healing(healing);
         }
         else
         {
-            player.SetStrengt(Mathf.Min(player.GetStrengt() + strengthUpRicochet, fullStrengt));
+            player.StrengtUp(strengthUpRicochet);
         }
     }
 }

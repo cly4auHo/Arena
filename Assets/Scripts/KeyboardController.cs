@@ -20,6 +20,7 @@ public class KeyboardController : MonoBehaviour
     {
         deltaX = Input.GetAxis("Horizontal") * speed;
         deltaZ = Input.GetAxis("Vertical") * speed;
+
         movement = new Vector3(deltaX, 0, deltaZ);
 
         movement = Vector3.ClampMagnitude(movement, speed);

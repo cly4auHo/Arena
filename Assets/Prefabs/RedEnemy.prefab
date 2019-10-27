@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 3023394824252983210}
   - component: {fileID: 3023394824252983211}
   - component: {fileID: 3023394824252983190}
-  - component: {fileID: 690854476581137011}
+  - component: {fileID: -4817636812067637515}
   m_Layer: 0
   m_Name: RedEnemy
-  m_TagString: RedEnemy
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -111,7 +111,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &690854476581137011
+--- !u!114 &-4817636812067637515
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,4 +123,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e46d563d27c12438a68fef6895b015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 50
   speed: 2

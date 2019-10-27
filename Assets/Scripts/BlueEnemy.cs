@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class BlueEnemy : MonoBehaviour
+public class BlueEnemy : Enemy
 {
-    private int health = 100;
-    private Transform player;
     private NavMeshAgent nav;
+    private Transform player;
     private const string playerTag = "Player";
 
     [SerializeField] private GameObject enemyBulletPrefab;
@@ -25,25 +24,20 @@ public class BlueEnemy : MonoBehaviour
 
         if (Time.timeSinceLevelLoad - timeAttack > timer)
         {
-            currentBullet = Instantiate(enemyBulletPrefab);
-            currentBullet.transform.position = transform.TransformPoint(Vector3.forward);
-            currentBullet.transform.rotation = transform.rotation;
-
+            Shot();
             ChangeTimer();
         }
+    }
+
+    void Shot()
+    {
+        currentBullet = Instantiate(enemyBulletPrefab);
+        currentBullet.transform.position = transform.TransformPoint(Vector3.forward);
+        currentBullet.transform.rotation = transform.rotation;
     }
 
     private void ChangeTimer()
     {
         timer = Time.timeSinceLevelLoad;
-    }
-    public void SetHealth(int health)
-    {
-        this.health = health;
-    }
-
-    public int GetHealth()
-    {
-        return health;
     }
 }

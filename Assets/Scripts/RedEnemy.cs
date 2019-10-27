@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 
-public class RedEnemy : MonoBehaviour
+public class RedEnemy : Enemy
 {
-    private int health = 50;
-    private int damage = 15;
     [SerializeField] private float speed = 2f;
+    private int damage = 15;
 
     private Vector3 myPosition;
     private Transform playerPosition;
@@ -14,11 +13,11 @@ public class RedEnemy : MonoBehaviour
     private const string playerTag = "Player";
 
     private Transform currentPosition;
+    private float jumpHight = 3.5f;
     private float timeOut = 5f;
     private float timer;
-    private float jumpHight = 3.5f;
 
-    void Start()
+    void Awake()
     {
         playerPosition = GameObject.FindGameObjectWithTag(playerTag).transform;
         rb = GetComponent<Rigidbody>();
@@ -31,21 +30,31 @@ public class RedEnemy : MonoBehaviour
     {
         if (Time.timeSinceLevelLoad - timer < timeOut)
         {
-            if (currentPosition.position.y < jumpHight)
-            {
-                rb.velocity = Vector3.up * speed;
-            }
-            else
-            {
-                rb.velocity = Vector3.zero;
-            }
+            Wait();
         }
         else
         {
-            myPosition = playerPosition.position;
-            rb.velocity = (myPosition - transform.position).normalized * speed;
-            transform.LookAt(myPosition);
+            Attack();
         }
+    }
+
+    void Wait()
+    {
+        if (currentPosition.position.y < jumpHight)
+        {
+            rb.velocity = Vector3.up * speed;
+        }
+        else
+        {
+            rb.velocity = Vector3.zero;
+        }
+    }
+
+    void Attack()
+    {
+        myPosition = playerPosition.position;
+        rb.velocity = (myPosition - transform.position).normalized * speed;
+        transform.LookAt(myPosition);
     }
 
     void OnTriggerEnter(Collider other)
@@ -56,19 +65,10 @@ public class RedEnemy : MonoBehaviour
 
             if (playerPosition)
             {
-                player.SetHealth(Mathf.Max(player.GetHealth() - damage, 0));
+                player.Damage(damage);
             }
 
             Destroy(gameObject);
         }
-    }
-    public void SetHealth(int health)
-    {
-        this.health = health;
-    }
-
-    public int GetHealth()
-    {
-        return health;
     }
 }

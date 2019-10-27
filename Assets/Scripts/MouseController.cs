@@ -2,11 +2,14 @@
 
 public class MouseController : MonoBehaviour
 {
-    private Player player;
+    private Pause pause;
+    private Rigidbody rb;
+
     [SerializeField] private RotationAxes axes = RotationAxes.MouseXAndY;
 
     [SerializeField] private float sensitivityHor = 3.0f;
     [SerializeField] private float sensitivityVert = 3.0f;
+
     private float minimumVert = -45.0f;
     private float maximumVert = 60.0f;
 
@@ -16,20 +19,23 @@ public class MouseController : MonoBehaviour
 
     void Start()
     {
-        player = FindObjectOfType<Player>();
+        pause = FindObjectOfType<Pause>();
+        rb = GetComponent<Rigidbody>();
 
-        Rigidbody body = GetComponent<Rigidbody>();
-        if (body != null)
-            body.freezeRotation = true;
+        if (rb)
+        {
+            rb.freezeRotation = true;
+        }
     }
 
     void Update()
     {
-        if (!player.IsPaused() && axes == RotationAxes.MouseX)
+        if (!pause.IsPaused() && axes == RotationAxes.MouseX)
         {
             transform.Rotate(0, Input.GetAxis("Mouse X") * sensitivityHor, 0);
         }
-        else if (!player.IsPaused() && axes == RotationAxes.MouseY)
+
+        else if (!pause.IsPaused() && axes == RotationAxes.MouseY)
         {
             rotationX -= Input.GetAxis("Mouse Y") * sensitivityVert;
             rotationX = Mathf.Clamp(rotationX, minimumVert, maximumVert);
@@ -37,7 +43,8 @@ public class MouseController : MonoBehaviour
 
             transform.localEulerAngles = new Vector3(rotationX, rotationY, 0);
         }
-        else if (!player.IsPaused() && axes == RotationAxes.MouseXAndY)
+
+        else if (!pause.IsPaused() && axes == RotationAxes.MouseXAndY)
         {
             rotationX -= Input.GetAxis("Mouse Y") * sensitivityVert;
             rotationX = Mathf.Clamp(rotationX, minimumVert, maximumVert);

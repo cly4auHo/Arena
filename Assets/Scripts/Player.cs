@@ -5,41 +5,16 @@ public class Player : MonoBehaviour
 {
     private int health = 100;
     private int strength = 50;
-    private int score;
-    private bool pause = false;
+    private int fullHP = 100;
+    private int fullStrength = 100;
 
     [SerializeField] private Text healtText;
     [SerializeField] private Text strengthText;
-    [SerializeField] private Text scoreText;
-    [SerializeField] private Text pauseText;
-    [SerializeField] private Text fullScore;
-    [SerializeField] private GameObject menuDeath;
-    [SerializeField] private GameObject menuPause;
-    [SerializeField] private GameObject enemyCreator;
-
-    private const string RedEnemyTag = "RedEnemy";
-    private const string BlueEnemyTag = "BlueEnemy";
-
-    private Camera camera;
-    private int size = 12;
-    private float posX;
-    private float posY;
 
     void Start()
     {
-        menuDeath.SetActive(false);
-        menuPause.SetActive(false);
-        enemyCreator.SetActive(true);
-        score = 0;
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         healtText.enabled = true;
         strengthText.enabled = true;
-        scoreText.enabled = true;
-
-        camera = GetComponentInChildren<Camera>();
     }
 
     void Update()
@@ -48,89 +23,38 @@ public class Player : MonoBehaviour
         {
             healtText.text = "Health " + health.ToString() + "/100";
             strengthText.text = "Strength " + strength.ToString() + "/100";
-            scoreText.text = "Score : " + score.ToString();
-
-            if (Input.GetKeyDown(KeyCode.Escape)) //pause
-            {
-                if (!pause)
-                {
-                    Pause();
-                }
-                else
-                {
-                    Resume();
-                }
-            }
         }
         else //death 
         {
-            menuDeath.SetActive(true);
-            enemyCreator.SetActive(false);
-
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-
             healtText.enabled = false;
             strengthText.enabled = false;
-            scoreText.enabled = false;
-
-            fullScore.text = "Очков набрано :" + score.ToString();
-
-            foreach (GameObject RedEnemies in GameObject.FindGameObjectsWithTag(RedEnemyTag))
-            {
-                Destroy(RedEnemies);
-            }
-            foreach (GameObject BlueEnemies in GameObject.FindGameObjectsWithTag(BlueEnemyTag))
-            {
-                Destroy(BlueEnemies);
-            }
         }
     }
 
-    public void ScoreUp()
+    public int GetHealth()
     {
-        score++;
+        return health;
     }
 
-    public void Restart()
+    public void Healing(int heal)
     {
-        score = 0;
-
-        Application.LoadLevel(Application.loadedLevel);
-        Time.timeScale = 1f;
+        health = Mathf.Min(health + heal, fullHP);
     }
 
-    void Pause()
+    public void Damage(int damage)
     {
-        menuPause.SetActive(true);
-        enemyCreator.SetActive(false);
-        pause = true;
-
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-
-        Time.timeScale = 0f;
+        health -= damage;
     }
 
-    void Resume()
+    public bool IsAlive()
     {
-        menuPause.SetActive(false);
-        enemyCreator.SetActive(true);
-        pause = false;
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        Time.timeScale = 1f;
-    }
-
-    void OnGUI()
-    {
-        if (!pause)
+        if (health > 0)
         {
-            posX = camera.pixelWidth / 2 - size / 4;
-            posY = camera.pixelHeight / 2 - size / 2;
-            GUI.Label(new Rect(posX, posY, size, size), "*");
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -144,18 +68,13 @@ public class Player : MonoBehaviour
         this.strength = strength;
     }
 
-    public int GetHealth()
+    public void StrengtUp(int value)
     {
-        return health;
+        strength = Mathf.Min(strength + value, fullStrength);
     }
 
-    public void SetHealth(int health)
+    public void StrengtLess(int fade)
     {
-        this.health = health;
-    }
-
-    public bool IsPaused()
-    {
-        return pause;
+        strength = Mathf.Max(0, strength - fade);
     }
 }

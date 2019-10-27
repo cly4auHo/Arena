@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 6318432501791007189}
   m_Layer: 0
   m_Name: BlueEnemy
-  m_TagString: BlueEnemy
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -90,7 +90,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6318432501791007176}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
@@ -146,5 +146,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fda5ffece3cf39a4cb058d227eb74c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 100
   enemyBulletPrefab: {fileID: 7525069385067481143, guid: 83f16ffd5612be846ac25572873594d7,
     type: 3}
