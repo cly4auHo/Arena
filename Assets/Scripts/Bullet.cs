@@ -8,18 +8,20 @@ public class Bullet : MonoBehaviour
     private Player player;
     private int fullHp = 100;
 
-    private int chanseOfRicochet;
-    private bool isRicochet = false;
-    private int healing = 50;
-    private int strengthUpRicochet = 10;
-
     private const string EnemyTag = "Enemy";
     private int redStrengthUp = 15;
     private int blueStrengthUp = 50;
 
+    private int chanseOfRicochet;
+    private bool isRicochet;
+    private int healing = 50;
+    private int strengthUpRicochet = 10;
+
     void Start()
     {
         chanseOfRicochet = Random.Range(0, fullHp);
+        isRicochet = false;
+
         player = FindObjectOfType<Player>();
     }
 

@@ -45,6 +45,7 @@ public class Teleport : MonoBehaviour
                 bestTarget = potentialTarget;
             }
         }
+
         return bestTarget;
     }
 }

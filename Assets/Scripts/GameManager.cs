@@ -48,9 +48,9 @@ public class GameManager : MonoBehaviour
 
         menuDeath.SetActive(true);
         fullScore.text = "Очков набрано :" + score.ToString();
+        score = 0;
 
         scoreText.enabled = false;
-
         enemyCreator.SetActive(false);
 
         foreach (GameObject Enemies in GameObject.FindGameObjectsWithTag(EnemyTag))

@@ -34,8 +34,7 @@ public class PlayerShot : MonoBehaviour
         {
             Shot();
         }
-
-        else if (Input.GetMouseButtonDown(1) && player.GetStrengt() >= fullStrengt) // Ult
+        else if (Input.GetMouseButtonDown(1) && player.GetStrengt() >= fullStrengt) 
         {
             Ult();
         }

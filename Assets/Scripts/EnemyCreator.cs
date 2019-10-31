@@ -2,19 +2,19 @@
 
 public class EnemyCreator : MonoBehaviour
 {
-    private float timeOfSpawn;
-    private float timer;
-    private float minTime = 2f;
-    private float deltaTime = 0.5f;
-
-    [SerializeField] private GameObject RedEnemyPrefab;
-    [SerializeField] private GameObject BlueEnemyPrefab;
-
-    private float yHight = 2.5f; //zone where enemies will be instaiate
+    private float yHight = 2f; //zone where enemies will be instaiate
     private float xTop = 2.5f;
     private float xBot = -2.5f;
     private float zLeft = -2.5f;
     private float zRight = 2.5f;
+
+    [SerializeField] private GameObject RedEnemyPrefab;
+    [SerializeField] private GameObject BlueEnemyPrefab;
+
+    private float timeOfSpawn;
+    private float timer;
+    private float minTime = 2f;
+    private float deltaTime = 0.5f;
 
     void Start()
     {
@@ -37,7 +37,7 @@ public class EnemyCreator : MonoBehaviour
         }
     }
 
-    Vector3 RandomPosition()
+    private Vector3 RandomPosition()
     {
         return new Vector3(Random.Range(xTop, xBot), yHight, Random.Range(zLeft, zRight));
     }

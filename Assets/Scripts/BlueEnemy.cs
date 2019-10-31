@@ -3,19 +3,15 @@ using UnityEngine.AI;
 
 public class BlueEnemy : Enemy
 {
-    private NavMeshAgent nav;
-    private Transform playerPosition;
-    private const string playerTag = "Player";
-
     [SerializeField] private GameObject enemyBulletPrefab;
     private GameObject currentBullet;
 
+    private NavMeshAgent nav;
     private float timeAttack = 5;
     private float timer = 0;
 
     void Awake()
     {
-        playerPosition = GameObject.FindGameObjectWithTag(playerTag).transform;
         nav = GetComponent<NavMeshAgent>();
     }
 

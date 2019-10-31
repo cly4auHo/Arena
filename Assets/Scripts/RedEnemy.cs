@@ -5,20 +5,14 @@ public class RedEnemy : Enemy
     [SerializeField] private float speed = 2f;
     private int damage = 15;
 
-    private Transform playerPosition;
     private Rigidbody rb;
     private float jumpHight = 3.5f;
-
-    private const string playerTag = "Player";
-
     private float timeOut = 5f;
     private float timer;
 
     void Awake()
     {
-        playerPosition = GameObject.FindGameObjectWithTag(playerTag).transform;
         rb = GetComponent<Rigidbody>();
-
         timer = Time.timeSinceLevelLoad;
     }
 
@@ -49,7 +43,6 @@ public class RedEnemy : Enemy
     void Attack()
     {
         rb.velocity = (playerPosition.position - transform.position).normalized * speed;
-
         transform.LookAt(playerPosition.position);
     }
 

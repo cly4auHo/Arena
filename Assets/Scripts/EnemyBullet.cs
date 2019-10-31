@@ -12,8 +12,6 @@ public class EnemyBullet : MonoBehaviour
     private const string PlayerTag = "Player";
 
     private Transform target;
-    private Vector3 targetPosition;
-
     private bool isTeleport = false;
     private Vector3 newPosition;
 
@@ -21,6 +19,7 @@ public class EnemyBullet : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<SphereCollider>();
+
         target = GameObject.FindGameObjectWithTag(PlayerTag).transform;
     }
 
@@ -43,9 +42,8 @@ public class EnemyBullet : MonoBehaviour
 
     void Attack()
     {
-        targetPosition = target.position;
-        rb.velocity = (targetPosition - transform.position).normalized * speed;
-        transform.LookAt(targetPosition);
+        rb.velocity = (target.position - transform.position).normalized * speed;
+        transform.LookAt(target.position);
     }
 
     void Walk()
