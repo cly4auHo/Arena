@@ -10,8 +10,8 @@ public class MouseController : MonoBehaviour
     [SerializeField] private float sensitivityHor = 3.0f;
     [SerializeField] private float sensitivityVert = 3.0f;
 
-    private float minimumVert = -45.0f;
-    private float maximumVert = 60.0f;
+    private float minimumVert = -30.0f;
+    private float maximumVert = 75.0f;
 
     private float rotationX;
     private float rotationY;
