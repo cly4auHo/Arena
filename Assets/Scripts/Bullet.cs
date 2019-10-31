@@ -40,7 +40,7 @@ public class Bullet : MonoBehaviour
             {
                 Ricochet();
             }
-            else if (isRicochet && red.GetHealth() <= 0)
+            else if (isRicochet && red.GetHealth() <= 0) //if ricochet kill
             {
                 HealOrStrengtUp();
                 Destroy(gameObject);

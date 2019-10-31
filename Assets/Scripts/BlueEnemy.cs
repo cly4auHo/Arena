@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class BlueEnemy : Enemy
 {
     private NavMeshAgent nav;
-    private Transform player;
+    private Transform playerPosition;
     private const string playerTag = "Player";
 
     [SerializeField] private GameObject enemyBulletPrefab;
@@ -15,13 +15,13 @@ public class BlueEnemy : Enemy
 
     void Awake()
     {
-        player = GameObject.FindGameObjectWithTag(playerTag).transform;
+        playerPosition = GameObject.FindGameObjectWithTag(playerTag).transform;
         nav = GetComponent<NavMeshAgent>();
     }
 
     void Update()
     {
-        nav.SetDestination(player.transform.position);
+        nav.SetDestination(playerPosition.transform.position);
 
         if (Time.timeSinceLevelLoad - timeAttack > timer)
         {

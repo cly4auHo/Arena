@@ -7,7 +7,6 @@ public class RedEnemy : Enemy
 
     private Transform playerPosition;
     private Rigidbody rb;
-    private Transform currentPosition;
     private float jumpHight = 3.5f;
 
     private const string playerTag = "Player";
@@ -19,7 +18,6 @@ public class RedEnemy : Enemy
     {
         playerPosition = GameObject.FindGameObjectWithTag(playerTag).transform;
         rb = GetComponent<Rigidbody>();
-        currentPosition = GetComponent<Transform>();
 
         timer = Time.timeSinceLevelLoad;
     }
@@ -38,7 +36,7 @@ public class RedEnemy : Enemy
 
     void Wait()
     {
-        if (currentPosition.position.y < jumpHight)
+        if (transform.position.y < jumpHight)
         {
             rb.velocity = Vector3.up * speed;
         }
@@ -50,10 +48,9 @@ public class RedEnemy : Enemy
 
     void Attack()
     {
-        currentPosition.position = playerPosition.position;
-        rb.velocity = (currentPosition.position - transform.position).normalized * speed;
+        rb.velocity = (playerPosition.position - transform.position).normalized * speed;
 
-        transform.LookAt(currentPosition.position);
+        transform.LookAt(playerPosition.position);
     }
 
     void OnTriggerEnter(Collider other)
@@ -62,11 +59,7 @@ public class RedEnemy : Enemy
         {
             Player player = other.GetComponent<Player>();
 
-            if (playerPosition)
-            {
-                player.Damage(damage);
-            }
-
+            player.Damage(damage);
             Destroy(gameObject);
         }
     }
