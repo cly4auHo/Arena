@@ -3,63 +3,35 @@
 public class MouseController : MonoBehaviour
 {
     private Pause pause;
-    private Rigidbody rb;
+    [SerializeField] private Transform playerBody;
 
-    [SerializeField] private RotationAxes axes = RotationAxes.MouseXAndY;
+    private float mouseSensitivity = 150f;
+    private float mouseX;
+    private float mouseY;
+    private float xRotation = 0f;
 
-    [SerializeField] private float sensitivityHor = 3.0f;
-    [SerializeField] private float sensitivityVert = 3.0f;
+    private float maxVert = 90f;
+    private float minVert = -30f;
 
-    private float minimumVert = -30.0f;
-    private float maximumVert = 75.0f;
-
-    private float rotationX;
-    private float rotationY;
-    private float delta;
 
     void Start()
     {
         pause = FindObjectOfType<Pause>();
-        rb = GetComponent<Rigidbody>();
-
-        if (rb)
-        {
-            rb.freezeRotation = true;
-        }
     }
 
     void Update()
     {
-        if (!pause.IsPaused() && axes == RotationAxes.MouseX)
-        {
-            transform.Rotate(0, Input.GetAxis("Mouse X") * sensitivityHor, 0);
-        }
+        if (pause.IsPaused())
+            return;
 
-        else if (!pause.IsPaused() && axes == RotationAxes.MouseY)
-        {
-            rotationX -= Input.GetAxis("Mouse Y") * sensitivityVert;
-            rotationX = Mathf.Clamp(rotationX, minimumVert, maximumVert);
-            rotationY = transform.localEulerAngles.y;
+        mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-            transform.localEulerAngles = new Vector3(rotationX, rotationY, 0);
-        }
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, minVert, maxVert);
 
-        else if (!pause.IsPaused() && axes == RotationAxes.MouseXAndY)
-        {
-            rotationX -= Input.GetAxis("Mouse Y") * sensitivityVert;
-            rotationX = Mathf.Clamp(rotationX, minimumVert, maximumVert);
+        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
-            delta = Input.GetAxis("Mouse X") * sensitivityHor;
-            rotationY = transform.localEulerAngles.y + delta;
-
-            transform.localEulerAngles = new Vector3(rotationX, rotationY, 0);
-        }
+        playerBody.Rotate(Vector3.up * mouseX);
     }
-}
-
-public enum RotationAxes
-{
-    MouseXAndY,
-    MouseX,
-    MouseY
 }
