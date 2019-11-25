@@ -9,7 +9,6 @@ public abstract class Enemy : MonoBehaviour
     private GameManager gm;
     private Player player;
 
-
     void Start()
     {
         gm = FindObjectOfType<GameManager>();

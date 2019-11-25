@@ -2,7 +2,7 @@
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private float speed = 10f;
+    [SerializeField] private float speed = 25f;
     [SerializeField] private int damage = 25;
 
     private Player player;
@@ -42,7 +42,7 @@ public class Bullet : MonoBehaviour
             {
                 Ricochet();
             }
-            else if (isRicochet && red.GetHealth() <= 0) //if ricochet kill
+            else if (isRicochet && red.GetHealth() <= 0) //if it ricochet, it will kill
             {
                 HealOrStrengtUp();
                 Destroy(gameObject);
@@ -82,31 +82,25 @@ public class Bullet : MonoBehaviour
 
     private void Ricochet()
     {
-        if (player.GetHealth() > chanseOfRicochet) //than less hp than more chance of ricochet
-        {
-            Destroy(gameObject);
-            return;
-        }
-
         GameObject[] enemies = GameObject.FindGameObjectsWithTag(EnemyTag);
 
-        if (enemies.Length == 0)
+        if (player.GetHealth() > chanseOfRicochet || enemies.Length == 0) //than less hp than more chance of ricochet
         {
             Destroy(gameObject);
             return;
         }
 
         isRicochet = true;
-        gameObject.transform.LookAt(ChoseTarget(enemies));
+        gameObject.transform.LookAt(ChoseNearestTarget(enemies));
     }
 
-    private Transform ChoseTarget(GameObject[] Enemies)
+    private Transform ChoseNearestTarget(GameObject[] enemies)
     {
         Transform bestTarget = null;
         float closestDistanceSqr = Mathf.Infinity;
         Vector3 currentPosition = transform.position;
 
-        foreach (GameObject potentialTarget in Enemies)
+        foreach (GameObject potentialTarget in enemies)
         {
             Vector3 directionToTarget = potentialTarget.transform.position - currentPosition;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
