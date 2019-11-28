@@ -410,7 +410,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &170076733
 GameObject:
@@ -953,7 +953,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &444863521
 GameObject:
@@ -2664,7 +2664,6 @@ MonoBehaviour:
   scoreText: {fileID: 1682500365}
   fullScore: {fileID: 2034705379}
   menuDeath: {fileID: 32640563}
-  enemyCreator: {fileID: 149296094}
 --- !u!4 &1451707206
 Transform:
   m_ObjectHideFlags: 0
@@ -2920,7 +2919,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuPause: {fileID: 1274866531}
-  enemyCreator: {fileID: 149296094}
 --- !u!1 &1682500363
 GameObject:
   m_ObjectHideFlags: 0

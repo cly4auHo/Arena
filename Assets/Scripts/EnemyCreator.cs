@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class EnemyCreator : MonoBehaviour
 {
@@ -8,24 +9,26 @@ public class EnemyCreator : MonoBehaviour
     private float zLeft = -2.5f;
     private float zRight = 2.5f;
 
+    private bool spawned;
     [SerializeField] private GameObject RedEnemyPrefab;
     [SerializeField] private GameObject BlueEnemyPrefab;
 
-    private float timeOfSpawn;
-    private float timer;
+    private float timeOfSpawn = 5f;
     private float minTime = 2f;
     private float deltaTime = 0.5f;
 
-    void Start()
+    private void Start()
     {
-        timeOfSpawn = 5f;
-        timer = 0;
+        spawned = true;
+        StartCoroutine(Creaate());
     }
 
-    void Update()
+    private IEnumerator Creaate()
     {
-        if (Time.timeSinceLevelLoad - timer > timeOfSpawn)
+        while (spawned)
         {
+            yield return new WaitForSeconds(timeOfSpawn);
+
             for (int i = 0; i < 4; i++)
             {
                 Instantiate(RedEnemyPrefab, RandomPosition(), Quaternion.identity);
@@ -33,7 +36,7 @@ public class EnemyCreator : MonoBehaviour
 
             Instantiate(BlueEnemyPrefab, RandomPosition(), Quaternion.identity);
 
-            ChangeTime();
+            timeOfSpawn = Mathf.Max(timeOfSpawn - deltaTime, minTime);
         }
     }
 
@@ -42,9 +45,8 @@ public class EnemyCreator : MonoBehaviour
         return new Vector3(Random.Range(xTop, xBot), yHight, Random.Range(zLeft, zRight));
     }
 
-    private void ChangeTime()
+    public void SetSpawn(bool spawned)
     {
-        timer = Time.timeSinceLevelLoad;
-        timeOfSpawn = Mathf.Max(timeOfSpawn - deltaTime, minTime);
+        this.spawned = spawned;
     }
 }

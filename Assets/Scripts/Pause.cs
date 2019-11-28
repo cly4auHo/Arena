@@ -3,17 +3,16 @@
 public class Pause : MonoBehaviour
 {
     [SerializeField] private GameObject menuPause;
-    [SerializeField] private GameObject enemyCreator;
-
+    private EnemyCreator enemyCreator;
     private Player player;
 
     private bool pause;
-
     private const string EnemyTag = "Enemy";
 
     void Start()
     {
         player = FindObjectOfType<Player>();
+        enemyCreator = FindObjectOfType<EnemyCreator>();
         menuPause.SetActive(false);
 
         pause = false;
@@ -48,7 +47,7 @@ public class Pause : MonoBehaviour
     void Paused()
     {
         menuPause.SetActive(true);
-        enemyCreator.SetActive(false);
+        enemyCreator.SetSpawn(false);
         pause = true;
 
         Cursor.lockState = CursorLockMode.None;
@@ -60,7 +59,7 @@ public class Pause : MonoBehaviour
     void Resume()
     {
         menuPause.SetActive(false);
-        enemyCreator.SetActive(true);
+        enemyCreator.SetSpawn(true);
         pause = false;
 
         Cursor.lockState = CursorLockMode.Locked;

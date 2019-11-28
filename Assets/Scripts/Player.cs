@@ -15,16 +15,14 @@ public class Player : MonoBehaviour
     {
         healtText.enabled = true;
         strengthText.enabled = true;
+
+        healtText.text = "Health " + health.ToString() + "/100";
+        strengthText.text = "Strength " + strength.ToString() + "/100";
     }
 
     void Update()
     {
-        if (health > 0)
-        {
-            healtText.text = "Health " + health.ToString() + "/100";
-            strengthText.text = "Strength " + strength.ToString() + "/100";
-        }
-        else //death 
+        if (health <= 0)
         {
             healtText.enabled = false;
             strengthText.enabled = false;
@@ -39,11 +37,13 @@ public class Player : MonoBehaviour
     public void Healing(int heal)
     {
         health = Mathf.Min(health + heal, fullHP);
+        healtText.text = "Health " + health.ToString() + "/100";
     }
 
     public void Damage(int damage)
     {
         health -= damage;
+        healtText.text = "Health " + health.ToString() + "/100";
     }
 
     public bool IsAlive()
@@ -66,15 +66,18 @@ public class Player : MonoBehaviour
     public void SetStrengt(int strength)
     {
         this.strength = strength;
+        strengthText.text = "Strength " + this.strength.ToString() + "/100";
     }
 
     public void StrengtUp(int value)
     {
         strength = Mathf.Min(strength + value, fullStrength);
+        strengthText.text = "Strength " + this.strength.ToString() + "/100";
     }
 
     public void StrengtLess(int fade)
     {
         strength = Mathf.Max(0, strength - fade);
+        strengthText.text = "Strength " + this.strength.ToString() + "/100";
     }
 }

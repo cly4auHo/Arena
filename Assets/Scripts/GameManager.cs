@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text scoreText;
     [SerializeField] private Text fullScore;
     [SerializeField] private GameObject menuDeath;
-    [SerializeField] private GameObject enemyCreator;
+    private EnemyCreator enemyCreator;
 
     private int score;
     private Player player;
@@ -16,9 +16,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        enemyCreator = FindObjectOfType<EnemyCreator>();
         player = FindObjectOfType<Player>();
 
         score = 0;
+        scoreText.text = "Score : " + score.ToString();
 
         menuDeath.SetActive(false);
         scoreText.enabled = true;
@@ -26,19 +28,20 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (player.IsAlive())
+        if (!player.IsAlive())
         {
-            scoreText.text = "Score : " + score.ToString();
+            PlayerDeath();
         }
         else
         {
-            PlayerDeath();
+            enemyCreator.SetSpawn(true);
         }
     }
 
     public void ScoreUp()
     {
         score++;
+        scoreText.text = "Score : " + score.ToString();
     }
 
     void PlayerDeath()
@@ -50,7 +53,7 @@ public class GameManager : MonoBehaviour
         fullScore.text = "Очков набрано :" + score.ToString();
 
         scoreText.enabled = false;
-        enemyCreator.SetActive(false);
+        enemyCreator.SetSpawn(false);
 
         foreach (GameObject Enemies in GameObject.FindGameObjectsWithTag(EnemyTag))
         {
