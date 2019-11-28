@@ -2,8 +2,9 @@
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private float speed = 25f;
+    [SerializeField] private float speed = 250f;
     [SerializeField] private int damage = 25;
+    private Rigidbody rb;
 
     private Player player;
     private int fullHp = 100;
@@ -14,11 +15,13 @@ public class Bullet : MonoBehaviour
 
     private int chanseOfRicochet;
     private bool isRicochet;
+
     private int healing = 50;
     private int strengthUpRicochet = 10;
 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
         chanseOfRicochet = Random.Range(0, fullHp);
         isRicochet = false;
 
@@ -27,7 +30,7 @@ public class Bullet : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(0, 0, speed * Time.deltaTime);
+        rb.velocity = transform.forward * speed * Time.deltaTime;
     }
 
     void OnTriggerEnter(Collider other)
