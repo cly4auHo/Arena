@@ -11,14 +11,14 @@ public class PlayerShot : MonoBehaviour
     private const string EnemyTag = "Enemy";
     private int fullStrengt = 100;
 
-    private Camera camera;
+    private Camera firstCamera;
     private int size = 12;
     private float posX;
     private float posY;
 
     void Start()
     {
-        camera = GetComponentInChildren<Camera>();
+        firstCamera = GetComponentInChildren<Camera>();
 
         gm = FindObjectOfType<GameManager>();
         player = FindObjectOfType<Player>();
@@ -62,10 +62,10 @@ public class PlayerShot : MonoBehaviour
 
     void OnGUI()
     {
-        if (!pause.IsPaused() && player.IsAlive())
+        if (!pause.IsPaused())
         {
-            posX = camera.pixelWidth / 2 - size / 4;
-            posY = camera.pixelHeight / 2 - size / 2;
+            posX = firstCamera.pixelWidth / 2 - size / 4;
+            posY = firstCamera.pixelHeight / 2 - size / 2;
             GUI.Label(new Rect(posX, posY, size, size), "*");
         }
     }

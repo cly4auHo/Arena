@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class RedEnemy : Enemy
 {
     [SerializeField] private float speed = 2f;
     private int damage = 15;
 
+    private Coroutine wait;
     private Rigidbody rb;
     private float jumpHight = 3.5f;
     private float timeOut = 5f;
@@ -14,44 +16,35 @@ public class RedEnemy : Enemy
     {
         rb = GetComponent<Rigidbody>();
         timer = Time.timeSinceLevelLoad;
+        wait = StartCoroutine(Wait());
     }
 
-    void Update()
+    private IEnumerator Wait()
     {
-        if (Time.timeSinceLevelLoad - timer < timeOut)
+        while (Time.timeSinceLevelLoad - timer < timeOut)
         {
-            Wait();
+            yield return
+                rb.velocity = (transform.position.y < jumpHight) ? Vector3.up * speed : rb.velocity = Vector3.zero;
         }
-        else
-        {
-            Attack();
-        }
+
+        StartCoroutine(Attack());
     }
 
-    void Wait()
+    private IEnumerator Attack()
     {
-        if (transform.position.y < jumpHight)
-        {
-            rb.velocity = Vector3.up * speed;
-        }
-        else
-        {
-            rb.velocity = Vector3.zero;
-        }
-    }
+        StopCoroutine(wait);
 
-    void Attack()
-    {
-        rb.velocity = (playerPosition.position - transform.position).normalized * speed;
-        transform.LookAt(playerPosition.position);
+        while (true)
+        {
+            yield return rb.velocity = (playerPosition.position - transform.position).normalized * speed;
+            transform.LookAt(playerPosition.position);
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(playerTag))
         {
-            Player player = other.GetComponent<Player>();
-
             player.Damage(damage);
             Destroy(gameObject);
         }

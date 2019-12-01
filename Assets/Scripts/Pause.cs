@@ -4,14 +4,12 @@ public class Pause : MonoBehaviour
 {
     [SerializeField] private GameObject menuPause;
     private EnemyCreator enemyCreator;
-    private Player player;
 
     private bool pause;
     private const string EnemyTag = "Enemy";
 
     void Start()
     {
-        player = FindObjectOfType<Player>();
         enemyCreator = FindObjectOfType<EnemyCreator>();
         menuPause.SetActive(false);
 
@@ -20,7 +18,7 @@ public class Pause : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && player.IsAlive())
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (!pause)
             {

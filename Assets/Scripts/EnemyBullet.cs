@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class EnemyBullet : MonoBehaviour
 {
@@ -7,12 +8,13 @@ public class EnemyBullet : MonoBehaviour
 
     private Rigidbody rb;
     private new SphereCollider collider;
+    private Coroutine attack;
 
     private Player player;
     private const string PlayerTag = "Player";
 
     private Transform target;
-    private bool isTeleport = false;
+    private bool isNotTeleport = true;
     private Vector3 newPosition;
 
     void Start()
@@ -21,40 +23,37 @@ public class EnemyBullet : MonoBehaviour
         collider = GetComponent<SphereCollider>();
 
         target = GameObject.FindGameObjectWithTag(PlayerTag).transform;
+        isNotTeleport = true;
+        attack = StartCoroutine(Attack());
     }
 
-    void Update()
+    private IEnumerator Attack()
     {
-        if (!isTeleport)
+        while (isNotTeleport)
         {
-            Attack();
+            yield return rb.velocity = (target.position - transform.position).normalized * speed;
+            transform.LookAt(target.position);
         }
-        else
+
+        StartCoroutine(Walk());
+    }
+
+    private IEnumerator Walk()
+    {
+        StopCoroutine(attack);
+
+        while ((newPosition - transform.position).magnitude < 0.1f)
         {
-            Walk();
-
-            if ((newPosition - transform.position).magnitude < 0.1f) //near of tp zone
-            {
-                Destroy(gameObject);
-            }
+            yield return rb.velocity = (newPosition - transform.position).normalized * speed;
+            transform.LookAt(newPosition);
         }
-    }
 
-    void Attack()
-    {
-        rb.velocity = (target.position - transform.position).normalized * speed;
-        transform.LookAt(target.position);
-    }
-
-    void Walk()
-    {
-        rb.velocity = (newPosition - transform.position).normalized * speed;
-        transform.LookAt(newPosition);
+        Destroy(gameObject);
     }
 
     public void AfterTeleport(Transform newPosition)
     {
-        isTeleport = true;
+        isNotTeleport = false;
         collider.enabled = false;
         this.newPosition = newPosition.position;
     }

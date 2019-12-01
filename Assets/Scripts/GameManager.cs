@@ -7,9 +7,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text fullScore;
     [SerializeField] private GameObject menuDeath;
     private EnemyCreator enemyCreator;
-
     private int score;
-    private Player player;
 
     private const string EnemyTag = "Enemy";
     private const string BulletTag = "Bullet";
@@ -17,7 +15,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         enemyCreator = FindObjectOfType<EnemyCreator>();
-        player = FindObjectOfType<Player>();
+        Player.Die += PlayerDeath; 
 
         score = 0;
         scoreText.text = "Score : " + score.ToString();
@@ -26,25 +24,13 @@ public class GameManager : MonoBehaviour
         scoreText.enabled = true;
     }
 
-    void Update()
-    {
-        if (!player.IsAlive())
-        {
-            PlayerDeath();
-        }
-        else
-        {
-            enemyCreator.SetSpawn(true);
-        }
-    }
-
     public void ScoreUp()
     {
         score++;
         scoreText.text = "Score : " + score.ToString();
     }
 
-    void PlayerDeath()
+    private void PlayerDeath()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;

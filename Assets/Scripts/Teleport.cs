@@ -8,15 +8,19 @@ public class Teleport : MonoBehaviour
     [SerializeField] private Transform[] TeleportZones;
     private const string PlayerTag = "Player";
 
+    private void Start()
+    {
+        player = FindObjectOfType<Player>();
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(PlayerTag))
         {
-            player = other.GetComponent<Player>();
             enemyBullets = FindObjectsOfType<EnemyBullet>();
 
-            other.transform.rotation = NewPosition(TeleportZones).rotation;
-            other.transform.position = NewPosition(TeleportZones).position;
+            player.transform.rotation = NewPosition(TeleportZones).rotation;
+            player.transform.position = NewPosition(TeleportZones).position;
 
             if (enemyBullets.Length != 0)
             {
