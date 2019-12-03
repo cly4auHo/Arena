@@ -5,9 +5,9 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected int health;
     protected Transform playerPosition;
     protected Player player;
+    protected const string playerTag = "Player";
 
     private GameManager gm;
-    protected const string playerTag = "Player";
 
     void Start()
     {

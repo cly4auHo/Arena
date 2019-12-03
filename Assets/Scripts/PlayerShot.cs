@@ -34,24 +34,29 @@ public class PlayerShot : MonoBehaviour
         {
             Shot();
         }
-        else if (Input.GetMouseButtonDown(1) && player.GetStrengt() >= fullStrengt) 
+        else if (Input.GetMouseButtonDown(1) && player.GetStrengt() >= fullStrengt)
         {
             Ult();
         }
     }
 
-    void Shot()
+    private void Shot()
     {
         currentBullet = Instantiate(bulletPrefab);
         currentBullet.transform.position = transform.TransformPoint(Vector3.forward);
         currentBullet.transform.rotation = transform.rotation;
     }
 
-    void Ult()
+    private void Ult()
     {
-        player.SetStrengt(0);
-
         GameObject[] enemies = GameObject.FindGameObjectsWithTag(EnemyTag);
+
+        if (enemies.Length == 0)
+        {
+            return;
+        }
+
+        player.SetStrengt(0);
 
         foreach (GameObject enemy in enemies)
         {

@@ -9,7 +9,7 @@ public class MouseController : MonoBehaviour
     private float mouseY;
     private float xRotation = 0f;
 
-    private float maxVert = 100f;
+    private float maxVert = 120f;
     private float minVert = -30f;
 
     void Update()

@@ -16,6 +16,7 @@ public class RedEnemy : Enemy
     {
         rb = GetComponent<Rigidbody>();
         timer = Time.timeSinceLevelLoad;
+
         wait = StartCoroutine(Wait());
     }
 

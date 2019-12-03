@@ -9,16 +9,18 @@ public class EnemyCreator : MonoBehaviour
     private float zLeft = -2.5f;
     private float zRight = 2.5f;
 
-    private bool spawned;
     [SerializeField] private GameObject RedEnemyPrefab;
     [SerializeField] private GameObject BlueEnemyPrefab;
 
+    private bool spawned;
     private float timeOfSpawn = 5f;
     private float minTime = 2f;
     private float deltaTime = 0.5f;
 
     private void Start()
     {
+        Player.Die += StopSpawn;
+
         spawned = true;
         StartCoroutine(Creaate());
     }
@@ -38,6 +40,12 @@ public class EnemyCreator : MonoBehaviour
 
             timeOfSpawn = Mathf.Max(timeOfSpawn - deltaTime, minTime);
         }
+    }
+
+    private void StopSpawn()
+    {
+        spawned = false;
+        Player.Die -= StopSpawn;
     }
 
     private Vector3 RandomPosition()

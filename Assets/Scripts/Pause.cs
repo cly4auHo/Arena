@@ -38,7 +38,8 @@ public class Pause : MonoBehaviour
             Destroy(Enemies);
         }
 
-        Application.LoadLevel(Application.loadedLevel);
+        //[System.Obsolete]
+        Application.LoadLevel(index: Application.loadedLevel);
         Time.timeScale = 1f;
     }
 

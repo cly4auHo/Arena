@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text scoreText;
     [SerializeField] private Text fullScore;
     [SerializeField] private GameObject menuDeath;
-    private EnemyCreator enemyCreator;
     private int score;
 
     private const string EnemyTag = "Enemy";
@@ -14,8 +13,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        enemyCreator = FindObjectOfType<EnemyCreator>();
-        Player.Die += PlayerDeath; 
+        Player.Die += PlayerDeath;
 
         score = 0;
         scoreText.text = "Score : " + score.ToString();
@@ -26,8 +24,7 @@ public class GameManager : MonoBehaviour
 
     public void ScoreUp()
     {
-        score++;
-        scoreText.text = "Score : " + score.ToString();
+        scoreText.text = "Score : " + (++score).ToString();
     }
 
     private void PlayerDeath()
@@ -39,15 +36,26 @@ public class GameManager : MonoBehaviour
         fullScore.text = "Очков набрано :" + score.ToString();
 
         scoreText.enabled = false;
-        enemyCreator.SetSpawn(false);
 
-        foreach (GameObject Enemies in GameObject.FindGameObjectsWithTag(EnemyTag))
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag(EnemyTag);
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag(BulletTag);
+
+        if (enemies.Length != 0)
         {
-            Destroy(Enemies);
+            foreach (GameObject enemie in enemies)
+            {
+                Destroy(enemie);
+            }
         }
-        foreach (GameObject Bullets in GameObject.FindGameObjectsWithTag(BulletTag))
+
+        if (bullets.Length != 0)
         {
-            Destroy(Bullets);
+            foreach (GameObject bullet in bullets)
+            {
+                Destroy(bullet);
+            }
         }
+
+        Player.Die -= PlayerDeath;
     }
 }

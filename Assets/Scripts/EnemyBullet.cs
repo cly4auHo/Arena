@@ -24,6 +24,7 @@ public class EnemyBullet : MonoBehaviour
 
         target = GameObject.FindGameObjectWithTag(PlayerTag).transform;
         isNotTeleport = true;
+
         attack = StartCoroutine(Attack());
     }
 
