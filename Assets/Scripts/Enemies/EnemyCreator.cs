@@ -11,11 +11,12 @@ public class EnemyCreator : MonoBehaviour
 
     [SerializeField] private GameObject RedEnemyPrefab;
     [SerializeField] private GameObject BlueEnemyPrefab;
+    private Enemy[] enemies;
 
     private bool spawned;
     private float timeOfSpawn = 5f;
     private float minTime = 2f;
-    private float deltaTime = 0.5f;
+    private float deltaTime = 0.25f;
 
     private void Start()
     {
@@ -46,6 +47,16 @@ public class EnemyCreator : MonoBehaviour
     {
         spawned = false;
         Player.Die -= StopSpawn;
+
+        enemies = FindObjectsOfType<Enemy>();
+
+        if (enemies.Length !=0)
+        {
+            foreach (Enemy enemy in enemies)
+            {
+                Destroy(enemy);
+            }
+        }
     }
 
     private Vector3 RandomPosition()

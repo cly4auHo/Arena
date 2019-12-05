@@ -4,16 +4,16 @@ using System.Collections;
 public class EnemyBullet : MonoBehaviour
 {
     [SerializeField] private float speed = 3f;
-    private int strengthDamage = 25;
+    [SerializeField] private int strengthDamage = 25;
 
     private Rigidbody rb;
     private new SphereCollider collider;
     private Coroutine attack;
 
     private Player player;
+    private Transform target;
     private const string PlayerTag = "Player";
 
-    private Transform target;
     private bool isNotTeleport = true;
     private Vector3 newPosition;
 
@@ -22,7 +22,8 @@ public class EnemyBullet : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<SphereCollider>();
 
-        target = GameObject.FindGameObjectWithTag(PlayerTag).transform;
+        player = FindObjectOfType<Player>();
+        target = player.transform;
         isNotTeleport = true;
 
         attack = StartCoroutine(Attack());

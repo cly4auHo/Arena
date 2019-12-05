@@ -2,6 +2,7 @@
 
 public class Bullet : MonoBehaviour
 {
+    [Header("Characteristics")]
     [SerializeField] private float speed = 250f;
     [SerializeField] private int damage = 25;
     private Rigidbody rb;
@@ -9,15 +10,15 @@ public class Bullet : MonoBehaviour
     private Player player;
     private int fullHp = 100;
 
+    [Header("Data")]
+    [SerializeField] private int redStrengthUp = 15;
+    [SerializeField] private int blueStrengthUp = 50;
     private const string EnemyTag = "Enemy";
-    private int redStrengthUp = 15;
-    private int blueStrengthUp = 50;
 
+    [SerializeField] private int healing = 15;
+    [SerializeField] private int strengthUpRicochet = 10;
     private int chanseOfRicochet;
     private bool isRicochet;
-
-    private int healing = 50;
-    private int strengthUpRicochet = 10;
 
     void Start()
     {

@@ -4,11 +4,12 @@ using System.Collections;
 
 public class BlueEnemy : Enemy
 {
+    [Header("Personal characteristics")]
     [SerializeField] private GameObject enemyBulletPrefab;
     private GameObject currentBullet;
 
+    [SerializeField] private float timeAttack = 5;
     private NavMeshAgent nav;
-    private float timeAttack = 5;
 
     void Awake()
     {
@@ -19,7 +20,8 @@ public class BlueEnemy : Enemy
 
     void Update()
     {
-        nav.SetDestination(playerPosition.transform.position);
+        playerPosition = player.transform.position;
+        nav.SetDestination(playerPosition);
     }
 
     private IEnumerator Shot()

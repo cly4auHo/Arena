@@ -3,18 +3,16 @@
 public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] protected int health;
-    protected Transform playerPosition;
     protected Player player;
+    protected Vector3 playerPosition;
     protected const string playerTag = "Player";
 
     private GameManager gm;
 
-    void Start()
+    protected void Start()
     {
         gm = FindObjectOfType<GameManager>();
         player = FindObjectOfType<Player>();
-
-        playerPosition = player.transform;
     }
 
     public void Damage(int damage, int strengtUp)

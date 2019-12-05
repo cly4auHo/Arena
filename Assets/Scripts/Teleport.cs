@@ -2,11 +2,11 @@
 
 public class Teleport : MonoBehaviour
 {
-    private Player player;
-    private EnemyBullet[] enemyBullets;
-
     [SerializeField] private Transform[] TeleportZones;
     private const string PlayerTag = "Player";
+
+    private Player player;
+    private EnemyBullet[] enemyBullets;
 
     private void Start()
     {
@@ -17,10 +17,10 @@ public class Teleport : MonoBehaviour
     {
         if (other.CompareTag(PlayerTag))
         {
-            enemyBullets = FindObjectsOfType<EnemyBullet>();
+            other.transform.rotation = NewPosition(TeleportZones).rotation;
+            other.transform.position = NewPosition(TeleportZones).position;
 
-            player.transform.rotation = NewPosition(TeleportZones).rotation;
-            player.transform.position = NewPosition(TeleportZones).position;
+            enemyBullets = FindObjectsOfType<EnemyBullet>();
 
             if (enemyBullets.Length != 0)
             {

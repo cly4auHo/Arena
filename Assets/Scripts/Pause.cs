@@ -4,12 +4,14 @@ public class Pause : MonoBehaviour
 {
     [SerializeField] private GameObject menuPause;
     private EnemyCreator enemyCreator;
+    private PlayerShot playerShot;
 
     private bool pause;
     private const string EnemyTag = "Enemy";
 
     void Start()
     {
+        playerShot = FindObjectOfType<PlayerShot>();
         enemyCreator = FindObjectOfType<EnemyCreator>();
         menuPause.SetActive(false);
 
@@ -38,37 +40,27 @@ public class Pause : MonoBehaviour
             Destroy(Enemies);
         }
 
-        //[System.Obsolete]
         Application.LoadLevel(index: Application.loadedLevel);
         Time.timeScale = 1f;
     }
 
     void Paused()
     {
+        pause = true;
+        playerShot.StopAim();
+        Time.timeScale = 0f;
+
         menuPause.SetActive(true);
         enemyCreator.SetSpawn(false);
-        pause = true;
-
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-
-        Time.timeScale = 0f;
     }
 
     void Resume()
     {
+        pause = false;
+        playerShot.GoAim();
+        Time.timeScale = 1f;
+
         menuPause.SetActive(false);
         enemyCreator.SetSpawn(true);
-        pause = false;
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        Time.timeScale = 1f;
-    }
-
-    public bool IsPaused()
-    {
-        return pause;
     }
 }
