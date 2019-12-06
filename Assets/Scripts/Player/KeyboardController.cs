@@ -2,11 +2,10 @@
 
 public class KeyboardController : MonoBehaviour
 {
-    private CharacterController charController;
-
     [SerializeField] private float speed = 2.5f;
+    private CharacterController charController;
     private float gravity = -3f;
-  
+
     private float deltaX;
     private float deltaZ;
     private Vector3 movement;

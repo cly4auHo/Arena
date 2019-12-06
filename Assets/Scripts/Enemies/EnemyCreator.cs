@@ -46,8 +46,6 @@ public class EnemyCreator : MonoBehaviour
     private void StopSpawn()
     {
         spawned = false;
-        Player.Die -= StopSpawn;
-
         enemies = FindObjectsOfType<Enemy>();
 
         if (enemies.Length !=0)
@@ -57,6 +55,8 @@ public class EnemyCreator : MonoBehaviour
                 Destroy(enemy);
             }
         }
+
+        Player.Die -= StopSpawn;
     }
 
     private Vector3 RandomPosition()

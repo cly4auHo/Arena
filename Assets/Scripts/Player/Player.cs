@@ -24,16 +24,6 @@ public class Player : MonoBehaviour
         strengthText.text = "Strength " + strength.ToString() + "/100";
     }
 
-    void Update()
-    {
-        if (health <= 0)
-        {
-            Die?.Invoke();
-            healtText.enabled = false;
-            strengthText.enabled = false;
-        }
-    }
-
     public int GetHealth()
     {
         return health;
@@ -49,6 +39,18 @@ public class Player : MonoBehaviour
     {
         health -= damage;
         healtText.text = "Health " + health.ToString() + "/100";
+
+        if (health <= 0)
+        {
+            Die?.Invoke();
+            healtText.enabled = false;
+            strengthText.enabled = false;
+        }
+    }
+
+    public bool IsAlive()
+    {
+        return health > 0;
     }
 
     public int GetStrengt()
