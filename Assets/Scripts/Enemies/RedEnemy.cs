@@ -31,7 +31,7 @@ public class RedEnemy : Enemy
         while (Time.timeSinceLevelLoad - timerSpawn < timeOut)
         {
             yield return
-                rb.velocity = (transform.position.y < jumpHight) ? Vector3.up * speed : rb.velocity = Vector3.zero;
+                rb.velocity = (transform.position.y < jumpHight) ? Vector3.up * speed : Vector3.zero;
         }
 
         StartCoroutine(Attack());

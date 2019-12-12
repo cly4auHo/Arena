@@ -3,7 +3,7 @@
 public class Bullet : MonoBehaviour
 {
     [Header("Characteristics")]
-    [SerializeField] private float speed = 250f;
+    [SerializeField] private float speed = 300f;
     [SerializeField] private int damage = 25;
     private Rigidbody rb;
 

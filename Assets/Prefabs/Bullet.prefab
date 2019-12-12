@@ -125,3 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 300
   damage: 25
+  redStrengthUp: 15
+  blueStrengthUp: 50
+  healing: 15
+  strengthUpRicochet: 10

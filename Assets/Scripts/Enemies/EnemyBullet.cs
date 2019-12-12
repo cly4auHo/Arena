@@ -1,17 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class EnemyBullet : MonoBehaviour
 {
-    [SerializeField] private float speed = 3f;
+    [SerializeField] private float speed = 5f;
     [SerializeField] private int strengthDamage = 25;
 
     private Rigidbody rb;
     private new SphereCollider collider;
-    private Coroutine attack;
 
     private Player player;
-    private Transform target;
+    private Vector3 target;
     private const string PlayerTag = "Player";
 
     private bool isNotTeleport = true;
@@ -23,34 +21,27 @@ public class EnemyBullet : MonoBehaviour
         collider = GetComponent<SphereCollider>();
 
         player = FindObjectOfType<Player>();
-        target = player.transform;
         isNotTeleport = true;
-
-        attack = StartCoroutine(Attack());
     }
 
-    private IEnumerator Attack()
+    private void Update()
     {
-        while (isNotTeleport)
+        if (isNotTeleport)
         {
-            yield return rb.velocity = (target.position - transform.position).normalized * speed;
-            transform.LookAt(target.position);
+            target = player.transform.position;
+            rb.velocity = (target - transform.position).normalized * speed;
+            transform.LookAt(target);
         }
-
-        StartCoroutine(Walk());
-    }
-
-    private IEnumerator Walk()
-    {
-        StopCoroutine(attack);
-
-        while ((newPosition - transform.position).magnitude < 0.1f)
+        else
         {
-            yield return rb.velocity = (newPosition - transform.position).normalized * speed;
+            rb.velocity = (newPosition - transform.position).normalized * speed;
             transform.LookAt(newPosition);
-        }
 
-        Destroy(gameObject);
+            if ((newPosition - transform.position).magnitude < 0.1f)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 
     public void AfterTeleport(Transform newPosition)
