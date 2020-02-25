@@ -56,7 +56,6 @@ public class Bullet : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-
         else if (other.gameObject.name == "BlueEnemy(Clone)")
         {
             BlueEnemy blue = other.GetComponent<BlueEnemy>();
@@ -77,7 +76,6 @@ public class Bullet : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-
         else
         {
             Destroy(gameObject);
