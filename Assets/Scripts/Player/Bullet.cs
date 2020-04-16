@@ -3,83 +3,60 @@
 public class Bullet : MonoBehaviour
 {
     [Header("Characteristics")]
+    [Range(100, 500)]
     [SerializeField] private float speed = 300f;
+    [Range(0, 50)]
     [SerializeField] private int damage = 25;
     private Rigidbody rb;
-
     private Player player;
-    private int fullHp = 100;
-
-    [Header("Data")]
-    [SerializeField] private int redStrengthUp = 15;
-    [SerializeField] private int blueStrengthUp = 50;
     private const string EnemyTag = "Enemy";
 
+    [Range(0, 100)]
     [SerializeField] private int healing = 15;
+    [Range(0, 100)]
     [SerializeField] private int strengthUpRicochet = 10;
     private int chanseOfRicochet;
     private bool isRicochet;
 
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        chanseOfRicochet = Random.Range(0, fullHp);
         isRicochet = false;
-
         player = FindObjectOfType<Player>();
+        chanseOfRicochet = Random.Range(0, player.GetFullHealth());
     }
 
-    void Update()
+    private void Update()
     {
         rb.velocity = transform.forward * speed * Time.deltaTime;
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == "RedEnemy(Clone)")
+        if (other.CompareTag(EnemyTag))
         {
-            RedEnemy red = other.GetComponent<RedEnemy>();
+            Enemy enemy = other.GetComponent<Enemy>();
 
-            red.Damage(damage, redStrengthUp);
+            if (enemy == null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            enemy.Damage(damage, enemy.GetStrengthUp());
 
             if (!isRicochet)
-            {
                 Ricochet();
-            }
-            else if (isRicochet && red.GetHealth() <= 0) //if it ricochet, it will kill
+            else if (isRicochet && enemy.GetHealth() <= 0) //if it ricochet, it will kill
             {
                 HealOrStrengtUp();
                 Destroy(gameObject);
             }
             else
-            {
                 Destroy(gameObject);
-            }
-        }
-        else if (other.gameObject.name == "BlueEnemy(Clone)")
-        {
-            BlueEnemy blue = other.GetComponent<BlueEnemy>();
-
-            blue.Damage(damage, blueStrengthUp);
-
-            if (!isRicochet)
-            {
-                Ricochet();
-            }
-            else if (isRicochet && blue.GetHealth() <= damage)
-            {
-                HealOrStrengtUp();
-                Destroy(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
         }
         else
-        {
             Destroy(gameObject);
-        }
     }
 
     private void Ricochet()
@@ -119,15 +96,11 @@ public class Bullet : MonoBehaviour
 
     private void HealOrStrengtUp()
     {
-        int chanseOfHeal = Random.Range(0, 1);
+        int chanseOfHeal = Random.Range(0, 2);
 
         if (chanseOfHeal == 0)
-        {
             player.Healing(healing);
-        }
         else
-        {
             player.StrengtUp(strengthUpRicochet);
-        }
     }
 }

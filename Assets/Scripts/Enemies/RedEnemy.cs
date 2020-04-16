@@ -4,7 +4,9 @@ using System.Collections;
 public class RedEnemy : Enemy
 {
     [Header("Personal characteristics")]
+    [Range(50, 200)]
     [SerializeField] private float speed = 2f;
+    [Range(5, 20)]
     [SerializeField] private int damage = 15;
 
     private Coroutine wait;
@@ -13,15 +15,14 @@ public class RedEnemy : Enemy
     private float timeOut = 5f;
     private float timerSpawn;
 
-    void Awake()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         timerSpawn = Time.timeSinceLevelLoad;
-
         wait = StartCoroutine(Wait());
     }
 
-    void Update()
+    private void Update()
     {
         playerPosition = player.transform.position;
     }
@@ -31,7 +32,7 @@ public class RedEnemy : Enemy
         while (Time.timeSinceLevelLoad - timerSpawn < timeOut)
         {
             yield return
-                rb.velocity = (transform.position.y < jumpHight) ? Vector3.up * speed : Vector3.zero;
+                rb.velocity = (transform.position.y < jumpHight) ? Vector3.up * speed * Time.deltaTime : Vector3.zero;
         }
 
         StartCoroutine(Attack());
@@ -43,12 +44,12 @@ public class RedEnemy : Enemy
 
         while (true)
         {
-            yield return rb.velocity = (playerPosition - transform.position).normalized * speed;
+            yield return rb.velocity = (playerPosition - transform.position).normalized * speed * Time.deltaTime;
             transform.LookAt(playerPosition);
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(playerTag))
         {

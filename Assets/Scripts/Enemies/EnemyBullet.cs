@@ -2,9 +2,10 @@
 
 public class EnemyBullet : MonoBehaviour
 {
-    [SerializeField] private float speed = 5f;
+    [Range(100, 500)]
+    [SerializeField] private int speed = 150;
+    [Range(5, 50)]
     [SerializeField] private int strengthDamage = 25;
-
     private Rigidbody rb;
     private new SphereCollider collider;
 
@@ -14,12 +15,12 @@ public class EnemyBullet : MonoBehaviour
 
     private bool isNotTeleport = true;
     private Vector3 newPosition;
+    private float nearTeleportZone = 0.1f;
 
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<SphereCollider>();
-
         player = FindObjectOfType<Player>();
         isNotTeleport = true;
     }
@@ -29,18 +30,16 @@ public class EnemyBullet : MonoBehaviour
         if (isNotTeleport)
         {
             target = player.transform.position;
-            rb.velocity = (target - transform.position).normalized * speed;
+            rb.velocity = (target - transform.position).normalized * speed * Time.deltaTime;
             transform.LookAt(target);
         }
         else
         {
-            rb.velocity = (newPosition - transform.position).normalized * speed;
+            rb.velocity = (newPosition - transform.position).normalized * speed * Time.deltaTime;
             transform.LookAt(newPosition);
 
-            if ((newPosition - transform.position).magnitude < 0.1f)
-            {
+            if ((newPosition - transform.position).magnitude < nearTeleportZone)
                 Destroy(gameObject);
-            }
         }
     }
 
@@ -51,18 +50,15 @@ public class EnemyBullet : MonoBehaviour
         this.newPosition = newPosition.position;
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(PlayerTag))
         {
             player = other.GetComponent<Player>();
-
             player.StrengtLess(strengthDamage);
             Destroy(gameObject);
         }
         else
-        {
             Destroy(gameObject);
-        }
     }
 }

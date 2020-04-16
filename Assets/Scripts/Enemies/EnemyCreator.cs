@@ -21,7 +21,6 @@ public class EnemyCreator : MonoBehaviour
     private void Start()
     {
         Player.Die += StopSpawn;
-
         spawned = true;
         StartCoroutine(Creaate());
     }
@@ -33,12 +32,9 @@ public class EnemyCreator : MonoBehaviour
             yield return new WaitForSeconds(timeOfSpawn);
 
             for (int i = 0; i < 4; i++)
-            {
                 Instantiate(RedEnemyPrefab, RandomPosition(), Quaternion.identity);
-            }
 
             Instantiate(BlueEnemyPrefab, RandomPosition(), Quaternion.identity);
-
             timeOfSpawn = Mathf.Max(timeOfSpawn - deltaTime, minTime);
         }
     }
@@ -48,13 +44,9 @@ public class EnemyCreator : MonoBehaviour
         spawned = false;
         enemies = FindObjectsOfType<Enemy>();
 
-        if (enemies.Length !=0)
-        {
+        if (enemies.Length != 0)
             foreach (Enemy enemy in enemies)
-            {
                 Destroy(enemy);
-            }
-        }
 
         Player.Die -= StopSpawn;
     }

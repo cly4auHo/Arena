@@ -147,6 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  strengthUpIfDie: 50
   enemyBulletPrefab: {fileID: 7525069385067481143, guid: 83f16ffd5612be846ac25572873594d7,
     type: 3}
   timeAttack: 5

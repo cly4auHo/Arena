@@ -8,17 +8,17 @@ public class BlueEnemy : Enemy
     [SerializeField] private GameObject enemyBulletPrefab;
     private GameObject currentBullet;
 
+    [Range(1f, 5f)]
     [SerializeField] private float timeAttack = 5;
     private NavMeshAgent nav;
 
-    void Awake()
+    private void Awake()
     {
         nav = GetComponent<NavMeshAgent>();
-
         StartCoroutine(Shot());
     }
 
-    void Update()
+    private void Update()
     {
         playerPosition = player.transform.position;
         nav.SetDestination(playerPosition);
@@ -27,7 +27,6 @@ public class BlueEnemy : Enemy
     private IEnumerator Shot()
     {
         yield return new WaitForSeconds(timeAttack);
-
         currentBullet = Instantiate(enemyBulletPrefab);
         currentBullet.transform.position = transform.TransformPoint(Vector3.forward);
         currentBullet.transform.rotation = transform.rotation;

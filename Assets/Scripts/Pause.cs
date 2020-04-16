@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Pause : MonoBehaviour
 {
@@ -6,9 +7,9 @@ public class Pause : MonoBehaviour
     private EnemyCreator enemyCreator;
     private PlayerShot playerShot;
     private Player player;
-
     private bool pause;
     private const string EnemyTag = "Enemy";
+    private const string MainSceneName = "Main";
 
     void Start()
     {
@@ -24,25 +25,19 @@ public class Pause : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape) && player.IsAlive())
         {
-            if (!pause)
-            {
-                Paused();
-            }
-            else
-            {
+            if (pause)
                 Resume();
-            }
+            else
+                Paused();
         }
     }
 
     public void Restart()
     {
-        foreach (GameObject Enemies in GameObject.FindGameObjectsWithTag(EnemyTag))
-        {
-            Destroy(Enemies);
-        }
+        foreach (GameObject enemies in GameObject.FindGameObjectsWithTag(EnemyTag))
+            Destroy(enemies);
 
-        Application.LoadLevel(index: Application.loadedLevel);
+        SceneManager.LoadScene(MainSceneName);
         Time.timeScale = 1f;
     }
 

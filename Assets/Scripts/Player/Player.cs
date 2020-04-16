@@ -13,13 +13,11 @@ public class Player : MonoBehaviour
     [SerializeField] private Text healtText;
     [SerializeField] private Text strengthText;
 
-    void Start()
+    private void Start()
     {
         health = 100;
-
         healtText.enabled = true;
         strengthText.enabled = true;
-
         healtText.text = "Health " + health.ToString() + "/100";
         strengthText.text = "Strength " + strength.ToString() + "/100";
     }
@@ -27,6 +25,11 @@ public class Player : MonoBehaviour
     public int GetHealth()
     {
         return health;
+    }
+
+    public int GetFullHealth()
+    {
+        return fullHP;
     }
 
     public void Healing(int heal)
@@ -53,9 +56,9 @@ public class Player : MonoBehaviour
         return health > 0;
     }
 
-    public int GetStrengt()
+    public bool StrengtIsFull()
     {
-        return strength;
+        return strength == fullStrength;
     }
 
     public void SetStrengt(int strength)

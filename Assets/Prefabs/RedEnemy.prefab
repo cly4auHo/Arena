@@ -124,4 +124,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 50
-  speed: 2
+  strengthUpIfDie: 15
+  speed: 100
+  damage: 15

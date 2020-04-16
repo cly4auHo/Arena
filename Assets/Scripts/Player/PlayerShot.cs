@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class PlayerShot : MonoBehaviour
 {
@@ -9,7 +8,6 @@ public class PlayerShot : MonoBehaviour
     private Player player;
     private GameManager gm;
     private const string EnemyTag = "Enemy";
-    private int fullStrengt = 100;
 
     private Camera firstCamera;
     private int size = 12;
@@ -17,25 +15,20 @@ public class PlayerShot : MonoBehaviour
     private float posY;
     private bool aim = true;
 
-    void Start()
+    private void Start()
     {
         firstCamera = GetComponentInChildren<Camera>();
         GoAim();
-
         gm = FindObjectOfType<GameManager>();
         player = FindObjectOfType<Player>();
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetMouseButtonDown(0))
-        {
             Shot();
-        }
-        else if (Input.GetMouseButtonDown(1) && player.GetStrengt() >= fullStrengt)
-        {
+        else if (Input.GetMouseButtonDown(1) && player.StrengtIsFull())
             Ult();
-        }
     }
 
     private void Shot()
@@ -49,21 +42,19 @@ public class PlayerShot : MonoBehaviour
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag(EnemyTag);
 
-        if (enemies.Length == 0)
+        if (enemies.Length != 0)
         {
-            return;
-        }
+            player.SetStrengt(0);
 
-        player.SetStrengt(0);
-
-        foreach (GameObject enemy in enemies)
-        {
-            gm.ScoreUp();
-            Destroy(enemy);
+            foreach (GameObject enemy in enemies)
+            {
+                gm.ScoreUp();
+                Destroy(enemy);
+            }
         }
     }
 
-    void OnGUI()
+    private void OnGUI()
     {
         if (aim)
         {
@@ -77,7 +68,6 @@ public class PlayerShot : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
         aim = false;
     }
 
@@ -85,7 +75,6 @@ public class PlayerShot : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
         aim = true;
     }
 }

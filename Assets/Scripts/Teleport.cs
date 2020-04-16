@@ -4,31 +4,25 @@ public class Teleport : MonoBehaviour
 {
     [SerializeField] private Transform[] TeleportZones;
     private const string PlayerTag = "Player";
-
     private Player player;
-    private EnemyBullet[] enemyBullets;
 
     private void Start()
     {
         player = FindObjectOfType<Player>();
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(PlayerTag))
         {
             other.transform.rotation = NewPosition(TeleportZones).rotation;
             other.transform.position = NewPosition(TeleportZones).position;
 
-            enemyBullets = FindObjectsOfType<EnemyBullet>();
+            EnemyBullet[] enemyBullets = FindObjectsOfType<EnemyBullet>();
 
             if (enemyBullets.Length != 0)
-            {
                 foreach (EnemyBullet bullets in enemyBullets)
-                {
                     bullets.AfterTeleport(NewPosition(TeleportZones));
-                }
-            }
         }
     }
 
