@@ -5,11 +5,13 @@ public class MouseController : MonoBehaviour
     [SerializeField] private Transform playerBody;
     [Range(100, 500)]
     [SerializeField] private float mouseSensitivity = 150f;
-    private float maxVert = 120f;
-    private float minVert = -30f;
+    [Range(-180, 180)]
+    [SerializeField] private float maxVert = 120f;
+    [Range(-180, 180)]
+    [SerializeField] private float minVert = -30f;
     private float mouseX;
     private float mouseY;
-    private float xRotation = 0f;
+    private float xRotation;
 
     private void Update()
     {

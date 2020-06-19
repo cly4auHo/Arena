@@ -4,14 +4,19 @@ using System;
 
 public class Player : MonoBehaviour
 {
-    private int health = 100;
-    private int strength = 50;
-    private int fullHP = 100;
-    private int fullStrength = 100;
-
-    public static Action Die;
+    [Header("Settings of Player")]
+    [Range(0, 500)]
+    [SerializeField] private int health = 100;
+    [Range(0, 100)]
+    [SerializeField] private int strength = 50;
+    [Range(0, 500)]
+    [SerializeField] private int fullHP = 100;
+    [Range(0, 100)]
+    [SerializeField] private int fullStrength = 100;
+    [Header("Bottom Text")]
     [SerializeField] private Text healtText;
     [SerializeField] private Text strengthText;
+    public Action Die;
 
     private void Start()
     {

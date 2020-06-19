@@ -8,23 +8,20 @@ public class RedEnemy : Enemy
     [SerializeField] private float speed = 2f;
     [Range(5, 20)]
     [SerializeField] private int damage = 15;
-
+    [Range(0, 10)]
+    [SerializeField] private float jumpHight = 3.5f;
+    [Range(0, 10)]
+    [SerializeField] private float timeOut = 5f;
     private Coroutine wait;
     private Rigidbody rb;
-    private float jumpHight = 3.5f;
-    private float timeOut = 5f;
     private float timerSpawn;
 
-    private void Awake()
+    private new void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody>();
         timerSpawn = Time.timeSinceLevelLoad;
         wait = StartCoroutine(Wait());
-    }
-
-    private void Update()
-    {
-        playerPosition = player.transform.position;
     }
 
     private IEnumerator Wait()

@@ -2,26 +2,23 @@
 
 public class Bullet : MonoBehaviour
 {
-    [Header("Characteristics")]
     [Range(100, 500)]
     [SerializeField] private float speed = 300f;
     [Range(0, 50)]
     [SerializeField] private int damage = 25;
+    [Range(0, 25)]
+    [SerializeField] private int healing = 15;
+    [Range(0, 20)]
+    [SerializeField] private int strengthUpRicochet = 10;
     private Rigidbody rb;
     private Player player;
     private const string EnemyTag = "Enemy";
-
-    [Range(0, 100)]
-    [SerializeField] private int healing = 15;
-    [Range(0, 100)]
-    [SerializeField] private int strengthUpRicochet = 10;
     private int chanseOfRicochet;
     private bool isRicochet;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        isRicochet = false;
         player = FindObjectOfType<Player>();
         chanseOfRicochet = Random.Range(0, player.GetFullHealth());
     }
@@ -43,11 +40,11 @@ public class Bullet : MonoBehaviour
                 return;
             }
 
-            enemy.Damage(damage, enemy.GetStrengthUp());
+            enemy.Damage(damage);
 
             if (!isRicochet)
                 Ricochet();
-            else if (isRicochet && enemy.GetHealth() <= 0) //if it ricochet, it will kill
+            else if (isRicochet && enemy.GetHealth() <= 0) 
             {
                 HealOrStrengtUp();
                 Destroy(gameObject);
@@ -70,7 +67,7 @@ public class Bullet : MonoBehaviour
         }
 
         isRicochet = true;
-        gameObject.transform.LookAt(ChoseNearestTarget(enemies));
+        transform.LookAt(ChoseNearestTarget(enemies));
     }
 
     private Transform ChoseNearestTarget(GameObject[] enemies)

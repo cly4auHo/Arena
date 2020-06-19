@@ -7,12 +7,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text fullScore;
     [SerializeField] private GameObject menuDeath;
     private int score;
+    private Player player;
+    private const string PlayerTag = "Player";
     private const string EnemyTag = "Enemy";
     private const string BulletTag = "Bullet";
 
     void Start()
     {
-        Player.Die += PlayerDeath;
+        player = GameObject.FindGameObjectWithTag(PlayerTag).GetComponent<Player>();
+        player.Die += PlayerDeath;
         score = 0;
         scoreText.text = "Score : " + score.ToString();
         menuDeath.SetActive(false);
@@ -44,6 +47,6 @@ public class GameManager : MonoBehaviour
             foreach (GameObject bullet in bullets)
                 Destroy(bullet);
 
-        Player.Die -= PlayerDeath;
+        player.Die -= PlayerDeath;
     }
 }

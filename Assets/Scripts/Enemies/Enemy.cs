@@ -18,33 +18,28 @@ public abstract class Enemy : MonoBehaviour
         player = FindObjectOfType<Player>();
     }
 
-    public void Damage(int damage, int strengtUp)
+    protected void Update()
+    {
+        playerPosition = player.transform.position;
+    }
+
+    public void Damage(int damage)
     {
         health -= damage;
 
         if (health <= 0)
-            Die(strengtUp);
-    }
-
-    public int GetStrengthUp()
-    {
-        return strengthUpIfDie;
-    }
-
-    private void Die(int strengtUp)
-    {
-        gm.ScoreUp();
-        player.StrengtUp(strengtUp);
-        Destroy(gameObject);
-    }
-
-    public void Die()
-    {
-        Destroy(gameObject);
+            Die();
     }
 
     public int GetHealth()
     {
         return health;
+    }
+
+    private void Die()
+    {
+        gm.ScoreUp();
+        player.StrengtUp(strengthUpIfDie);
+        Destroy(gameObject);
     }
 }

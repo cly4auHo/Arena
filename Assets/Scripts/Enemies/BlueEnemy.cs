@@ -6,21 +6,21 @@ public class BlueEnemy : Enemy
 {
     [Header("Personal characteristics")]
     [SerializeField] private GameObject enemyBulletPrefab;
-    private GameObject currentBullet;
-
-    [Range(1f, 5f)]
+    [Range(1, 10)]
     [SerializeField] private float timeAttack = 5;
+    private GameObject currentBullet;
     private NavMeshAgent nav;
 
-    private void Awake()
+    private new void Start()
     {
+        base.Start();
         nav = GetComponent<NavMeshAgent>();
         StartCoroutine(Shot());
     }
 
-    private void Update()
+    private new void Update()
     {
-        playerPosition = player.transform.position;
+        base.Update();
         nav.SetDestination(playerPosition);
     }
 

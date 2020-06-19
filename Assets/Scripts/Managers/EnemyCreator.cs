@@ -3,24 +3,36 @@ using System.Collections;
 
 public class EnemyCreator : MonoBehaviour
 {
-    private float yHight = 2f; //zone where enemies will be instaiate
-    private float xTop = 2.5f;
-    private float xBot = -2.5f;
-    private float zLeft = -2.5f;
-    private float zRight = 2.5f;
-
+    [Header("Settings")]
+    [Range(0, 5)]
+    [SerializeField] private float timeOfSpawn = 5f;
+    [Range(0, 3)]
+    [SerializeField] private float minTime = 2f;
+    [Range(0, 1)]
+    [SerializeField] private float deltaTime = 0.25f;
+    [Header("Zone where enemies will be instaiate")]
+    [Range(0, 5)]
+    [SerializeField] private float yHight = 2f; 
+    [Range(0, 5)]
+    [SerializeField] private float xTop = 2.5f;
+    [Range(-5, 0)]
+    [SerializeField] private float xBot = -2.5f;
+    [Range(-5, 0)]
+    [SerializeField] private float zLeft = -2.5f;
+    [Range(0, 5)]
+    [SerializeField] private float zRight = 2.5f;
+    [Header("Enemies")]
     [SerializeField] private GameObject RedEnemyPrefab;
     [SerializeField] private GameObject BlueEnemyPrefab;
     private Enemy[] enemies;
-
     private bool spawned;
-    private float timeOfSpawn = 5f;
-    private float minTime = 2f;
-    private float deltaTime = 0.25f;
+    private Player player;
+    private const string PlayerTag = "Player";
 
     private void Start()
     {
-        Player.Die += StopSpawn;
+        player = GameObject.FindGameObjectWithTag(PlayerTag).GetComponent<Player>();
+        player.Die += StopSpawn;
         spawned = true;
         StartCoroutine(Creaate());
     }
@@ -48,7 +60,7 @@ public class EnemyCreator : MonoBehaviour
             foreach (Enemy enemy in enemies)
                 Destroy(enemy);
 
-        Player.Die -= StopSpawn;
+        player.Die -= StopSpawn;
     }
 
     private Vector3 RandomPosition()
