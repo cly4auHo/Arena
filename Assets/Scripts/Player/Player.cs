@@ -16,7 +16,13 @@ public class Player : MonoBehaviour
     [Header("Bottom Text")]
     [SerializeField] private Text healtText;
     [SerializeField] private Text strengthText;
+    public Action Ult;
     public Action Die;
+    private const string pauseManagerTag = "PauseManager";
+
+    public int Health => health;
+    public int FullHealth => fullHP;
+    public bool IsAlive => health > 0;
 
     private void Start()
     {
@@ -25,16 +31,7 @@ public class Player : MonoBehaviour
         strengthText.enabled = true;
         healtText.text = "Health " + health.ToString() + "/100";
         strengthText.text = "Strength " + strength.ToString() + "/100";
-    }
-
-    public int GetHealth()
-    {
-        return health;
-    }
-
-    public int GetFullHealth()
-    {
-        return fullHP;
+        GameObject.FindGameObjectWithTag(pauseManagerTag).GetComponent<Pause>().RestartGame += Restart;
     }
 
     public void Healing(int heal)
@@ -49,27 +46,7 @@ public class Player : MonoBehaviour
         healtText.text = "Health " + health.ToString() + "/100";
 
         if (health <= 0)
-        {
             Die?.Invoke();
-            healtText.enabled = false;
-            strengthText.enabled = false;
-        }
-    }
-
-    public bool IsAlive()
-    {
-        return health > 0;
-    }
-
-    public bool StrengtIsFull()
-    {
-        return strength == fullStrength;
-    }
-
-    public void SetStrengt(int strength)
-    {
-        this.strength = strength;
-        strengthText.text = "Strength " + this.strength.ToString() + "/100";
     }
 
     public void StrengtUp(int value)
@@ -82,5 +59,19 @@ public class Player : MonoBehaviour
     {
         strength = Mathf.Max(0, strength - fade);
         strengthText.text = "Strength " + strength.ToString() + "/100";
+    }
+
+    public void Ultimate()
+    {
+        if (strength >= fullStrength)
+        {
+            Ult?.Invoke();
+            strength = 0;
+        }
+    }
+
+    private void Restart()
+    {
+        Healing(fullHP);
     }
 }

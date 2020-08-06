@@ -9,14 +9,13 @@ public class GameManager : MonoBehaviour
     private int score;
     private Player player;
     private const string PlayerTag = "Player";
-    private const string EnemyTag = "Enemy";
-    private const string BulletTag = "Bullet";
+    private const string pauseManagerTag = "PauseManager";
 
-    void Start()
+    private void Start()
     {
         player = GameObject.FindGameObjectWithTag(PlayerTag).GetComponent<Player>();
         player.Die += PlayerDeath;
-        score = 0;
+        GameObject.FindGameObjectWithTag(pauseManagerTag).GetComponent<Pause>().RestartGame += Restart;
         scoreText.text = "Score : " + score.ToString();
         menuDeath.SetActive(false);
         scoreText.enabled = true;
@@ -31,22 +30,18 @@ public class GameManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
         menuDeath.SetActive(true);
         fullScore.text = "Очков набрано :" + score.ToString();
         scoreText.enabled = false;
-
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag(EnemyTag);
-        GameObject[] bullets = GameObject.FindGameObjectsWithTag(BulletTag);
-
-        if (enemies.Length != 0)
-            foreach (GameObject enemie in enemies)
-                Destroy(enemie);
-
-        if (bullets.Length != 0)
-            foreach (GameObject bullet in bullets)
-                Destroy(bullet);
-
         player.Die -= PlayerDeath;
+    }
+
+    private void Restart()
+    {
+        score = 0;
+        menuDeath.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        scoreText.enabled = true;
     }
 }

@@ -5,10 +5,9 @@ using System.Collections;
 public class BlueEnemy : Enemy
 {
     [Header("Personal characteristics")]
-    [SerializeField] private GameObject enemyBulletPrefab;
+    [SerializeField] private Reusable enemyBulletPrefab;
     [Range(1, 10)]
     [SerializeField] private float timeAttack = 5;
-    private GameObject currentBullet;
     private NavMeshAgent nav;
 
     private new void Start()
@@ -27,8 +26,7 @@ public class BlueEnemy : Enemy
     private IEnumerator Shot()
     {
         yield return new WaitForSeconds(timeAttack);
-        currentBullet = Instantiate(enemyBulletPrefab);
+        Reusable currentBullet = poolManager.Instantiate(enemyBulletPrefab, transform.position, transform.rotation, transform);
         currentBullet.transform.position = transform.TransformPoint(Vector3.forward);
-        currentBullet.transform.rotation = transform.rotation;
     }
 }

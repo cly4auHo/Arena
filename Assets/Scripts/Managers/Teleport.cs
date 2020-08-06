@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Teleport : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class Teleport : MonoBehaviour
 
             if (enemyBullets.Length != 0)
                 foreach (EnemyBullet bullets in enemyBullets)
-                    bullets.AfterTeleport(NewPosition(TeleportZones));
+                    bullets.SetNewPosition(NewPosition(TeleportZones).position);
         }
     }
 

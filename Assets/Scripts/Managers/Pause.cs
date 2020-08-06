@@ -1,29 +1,24 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Pause : MonoBehaviour
 {
+    public Action RestartGame;
     [SerializeField] private GameObject menuPause;
-    private EnemyCreator enemyCreator;
-    private PlayerShot playerShot;
-    private Player player;
+    [SerializeField] private EnemyCreator enemyCreator;
+    [SerializeField] private PlayerShot playerShot;
+    [SerializeField] private Player player;
     private bool pause;
-    private const string EnemyTag = "Enemy";
-    private const string MainSceneName = "Main";
 
-    void Start()
+    private void Start()
     {
-        playerShot = FindObjectOfType<PlayerShot>();
-        enemyCreator = FindObjectOfType<EnemyCreator>();
-        player = FindObjectOfType<Player>();
-
         menuPause.SetActive(false);
-        pause = false;
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && player.IsAlive())
+        if (Input.GetKeyDown(KeyCode.Escape) && player.IsAlive)
         {
             if (pause)
                 Resume();
@@ -34,29 +29,24 @@ public class Pause : MonoBehaviour
 
     public void Restart()
     {
-        foreach (GameObject enemies in GameObject.FindGameObjectsWithTag(EnemyTag))
-            Destroy(enemies);
-
-        SceneManager.LoadScene(MainSceneName);
         Time.timeScale = 1f;
+        RestartGame?.Invoke();
     }
 
-    void Paused()
+    private void Paused()
     {
         pause = true;
         playerShot.StopAim();
         Time.timeScale = 0f;
-
         menuPause.SetActive(true);
         enemyCreator.SetSpawn(false);
     }
 
-    void Resume()
+    private void Resume()
     {
         pause = false;
         playerShot.GoAim();
         Time.timeScale = 1f;
-
         menuPause.SetActive(false);
         enemyCreator.SetSpawn(true);
     }

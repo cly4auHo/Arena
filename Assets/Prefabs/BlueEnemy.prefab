@@ -146,8 +146,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fda5ffece3cf39a4cb058d227eb74c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  key: BlueEnemy
   health: 100
   strengthUpIfDie: 50
-  enemyBulletPrefab: {fileID: 7525069385067481143, guid: 83f16ffd5612be846ac25572873594d7,
+  enemyBulletPrefab: {fileID: 7525069385067481132, guid: 83f16ffd5612be846ac25572873594d7,
     type: 3}
   timeAttack: 5

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : Reusable
 {
     [Range(100, 500)]
     [SerializeField] private float speed = 300f;
@@ -13,14 +13,18 @@ public class Bullet : MonoBehaviour
     private Rigidbody rb;
     private Player player;
     private const string EnemyTag = "Enemy";
+    private const string playerTag = "Player";
+    private const string pauseManagerTag = "PauseManager";
     private int chanseOfRicochet;
     private bool isRicochet;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        player = FindObjectOfType<Player>();
-        chanseOfRicochet = Random.Range(0, player.GetFullHealth());
+        player = GameObject.FindGameObjectWithTag(playerTag).GetComponent<Player>();
+        chanseOfRicochet = Random.Range(0, player.FullHealth + 1);
+        player.Die += Die;
+        GameObject.FindGameObjectWithTag(pauseManagerTag).GetComponent<Pause>().RestartGame += Die;
     }
 
     private void Update()
@@ -33,36 +37,29 @@ public class Bullet : MonoBehaviour
         if (other.CompareTag(EnemyTag))
         {
             Enemy enemy = other.GetComponent<Enemy>();
-
-            if (enemy == null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
             enemy.Damage(damage);
 
             if (!isRicochet)
+            {
                 Ricochet();
-            else if (isRicochet && enemy.GetHealth() <= 0) 
+                return;
+            }
+            else if (isRicochet && enemy.Health <= 0)
             {
                 HealOrStrengtUp();
-                Destroy(gameObject);
             }
-            else
-                Destroy(gameObject);
         }
-        else
-            Destroy(gameObject);
+
+        Die();
     }
 
     private void Ricochet()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag(EnemyTag);
 
-        if (player.GetHealth() > chanseOfRicochet || enemies.Length == 0) //than less hp than more chance of ricochet
+        if (player.Health > chanseOfRicochet || enemies.Length == 0)
         {
-            Destroy(gameObject);
+            Die();
             return;
         }
 
@@ -93,11 +90,14 @@ public class Bullet : MonoBehaviour
 
     private void HealOrStrengtUp()
     {
-        int chanseOfHeal = Random.Range(0, 2);
-
-        if (chanseOfHeal == 0)
+        if (Random.Range(0, 2) == 0)
             player.Healing(healing);
         else
             player.StrengtUp(strengthUpRicochet);
+    }
+
+    private void Die()
+    {
+        Reuse(this);
     }
 }

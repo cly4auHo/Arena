@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EnemyBullet : MonoBehaviour
+public class EnemyBullet : Reusable
 {
     [Range(100, 500)]
     [SerializeField] private int speed = 150;
@@ -8,30 +8,28 @@ public class EnemyBullet : MonoBehaviour
     [SerializeField] private int strengthDamage = 25;
     private Rigidbody rb;
     private new SphereCollider collider;
-
     private Player player;
-    private Vector3 target;
     private const string PlayerTag = "Player";
-
+    private const string pauseManagerTag = "PauseManager";
     private bool isNotTeleport = true;
     private Vector3 newPosition;
-    private float nearTeleportZone = 0.1f;
+    private const float nearTeleportZone = 0.5f;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<SphereCollider>();
-        player = FindObjectOfType<Player>();
-        isNotTeleport = true;
+        player = GameObject.FindGameObjectWithTag(PlayerTag).GetComponent<Player>();
+        player.Die += Die;
+        GameObject.FindGameObjectWithTag(pauseManagerTag).GetComponent<Pause>().RestartGame += Die;
     }
 
     private void Update()
     {
         if (isNotTeleport)
         {
-            target = player.transform.position;
-            rb.velocity = (target - transform.position).normalized * speed * Time.deltaTime;
-            transform.LookAt(target);
+            rb.velocity = (player.transform.position - transform.position).normalized * speed * Time.deltaTime;
+            transform.LookAt(player.transform.position);
         }
         else
         {
@@ -39,26 +37,27 @@ public class EnemyBullet : MonoBehaviour
             transform.LookAt(newPosition);
 
             if ((newPosition - transform.position).magnitude < nearTeleportZone)
-                Destroy(gameObject);
+                Reuse(this);
         }
     }
 
-    public void AfterTeleport(Transform newPosition)
+    public void SetNewPosition(Vector3 newPosition)
     {
         isNotTeleport = false;
         collider.enabled = false;
-        this.newPosition = newPosition.position;
+        this.newPosition = newPosition;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(PlayerTag))
-        {
-            player = other.GetComponent<Player>();
             player.StrengtLess(strengthDamage);
-            Destroy(gameObject);
-        }
-        else
-            Destroy(gameObject);
+
+        Reuse(this);
+    }
+
+    private void Die()
+    {
+        Reuse(this);
     }
 }

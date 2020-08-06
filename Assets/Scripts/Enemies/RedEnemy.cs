@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class RedEnemy : Enemy
 {
@@ -12,7 +11,6 @@ public class RedEnemy : Enemy
     [SerializeField] private float jumpHight = 3.5f;
     [Range(0, 10)]
     [SerializeField] private float timeOut = 5f;
-    private Coroutine wait;
     private Rigidbody rb;
     private float timerSpawn;
 
@@ -21,27 +19,19 @@ public class RedEnemy : Enemy
         base.Start();
         rb = GetComponent<Rigidbody>();
         timerSpawn = Time.timeSinceLevelLoad;
-        wait = StartCoroutine(Wait());
     }
 
-    private IEnumerator Wait()
+    private new void Update()
     {
-        while (Time.timeSinceLevelLoad - timerSpawn < timeOut)
+        base.Update();
+
+        if (Time.timeSinceLevelLoad - timerSpawn < timeOut)
         {
-            yield return
-                rb.velocity = (transform.position.y < jumpHight) ? Vector3.up * speed * Time.deltaTime : Vector3.zero;
+            rb.velocity = (transform.position.y < jumpHight) ? Vector3.up * speed * Time.deltaTime : Vector3.zero;
         }
-
-        StartCoroutine(Attack());
-    }
-
-    private IEnumerator Attack()
-    {
-        StopCoroutine(wait);
-
-        while (true)
+        else
         {
-            yield return rb.velocity = (playerPosition - transform.position).normalized * speed * Time.deltaTime;
+            rb.velocity = (playerPosition - transform.position).normalized * speed * Time.deltaTime;
             transform.LookAt(playerPosition);
         }
     }
@@ -51,7 +41,7 @@ public class RedEnemy : Enemy
         if (other.CompareTag(playerTag))
         {
             player.Damage(damage);
-            Destroy(gameObject);
+            Reuse?.Invoke(this);
         }
     }
 }

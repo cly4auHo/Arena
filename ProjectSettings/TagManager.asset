@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - Bullet
+  - PoolManager
+  - GameManager
+  - PauseManager
   layers:
   - Default
   - TransparentFX

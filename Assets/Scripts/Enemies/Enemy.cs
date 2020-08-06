@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy : Reusable
 {
     [Range(50, 200)]
     [SerializeField] protected int health;
@@ -8,14 +8,23 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected int strengthUpIfDie = 25;
     protected Player player;
     protected Vector3 playerPosition;
+    protected PoolManager poolManager;
     protected const string playerTag = "Player";
-
+    private const string gmTag = "GameManager";
+    private const string pmTag = "PoolManager";
+    private const string pauseManagerTag = "PauseManager";
     private GameManager gm;
+
+    public int Health => health;
 
     protected void Start()
     {
-        gm = FindObjectOfType<GameManager>();
-        player = FindObjectOfType<Player>();
+        player = GameObject.FindGameObjectWithTag(playerTag).GetComponent<Player>();
+        player.Ult += Die;
+        player.Die += Die;
+        gm = GameObject.FindGameObjectWithTag(gmTag).GetComponent<GameManager>();
+        poolManager = GameObject.FindGameObjectWithTag(pmTag).GetComponent<PoolManager>();
+        GameObject.FindGameObjectWithTag(pauseManagerTag).GetComponent<Pause>().RestartGame += Die;
     }
 
     protected void Update()
@@ -31,15 +40,10 @@ public abstract class Enemy : MonoBehaviour
             Die();
     }
 
-    public int GetHealth()
-    {
-        return health;
-    }
-
     private void Die()
     {
         gm.ScoreUp();
         player.StrengtUp(strengthUpIfDie);
-        Destroy(gameObject);
+        Reuse?.Invoke(this);
     }
 }

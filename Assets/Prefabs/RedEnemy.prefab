@@ -123,6 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e46d563d27c12438a68fef6895b015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  key: RedEnemy
   health: 50
   strengthUpIfDie: 15
   speed: 100
